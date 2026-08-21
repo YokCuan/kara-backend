@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "CBackend",
+    name: "KaraBackend",
     platforms: [
        .macOS(.v13)
     ],
@@ -19,7 +19,7 @@ let package = Package(
     ],
     targets: [
         .executableTarget(
-            name: "CBackend",
+            name: "KaraBackend",
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio"),
@@ -33,9 +33,9 @@ let package = Package(
             swiftSettings: swiftSettings
         ),
         .testTarget(
-            name: "CBackendTests",
+            name: "KaraBackendTests",
             dependencies: [
-                .target(name: "CBackend"),
+                .target(name: "KaraBackend"),
                 .product(name: "VaporTesting", package: "vapor"),
             ],
             swiftSettings: swiftSettings

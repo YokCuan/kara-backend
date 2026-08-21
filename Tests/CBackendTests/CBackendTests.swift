@@ -1,9 +1,9 @@
-@testable import CBackend
+@testable import KaraBackend
 import VaporTesting
 import Testing
 
 @Suite("App Tests")
-struct CBackendTests {
+struct KaraBackendTests {
     @Test("Test Hello World Route")
     func helloWorld() async throws {
         try await withApp(configure: configure) { app in

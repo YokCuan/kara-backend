@@ -5,11 +5,39 @@ import NIOSSL
 import Queues
 import QueuesFluentDriver
 
-/// configures your application
+// configures your application
 func configure(_ app: Application) async throws {
-    // uncomment to serve files from /Public folder
     // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
 
-    // register routes
+    guard
+        let host = Environment.get("DATABASE_HOST"),
+        let database = Environment.get("DATABASE_NAME"),
+        let username = Environment.get("DATABASE_USERNAME"),
+        let password = Environment.get("DATABASE_PASSWORD"),
+        let portString = Environment.get("DATABASE_PORT"),
+        let port = Int(portString)
+    else {
+        fatalError("Missing or invalid database environment variables")
+    }
+    
+    let tlsConfiguration = TLSConfiguration.makeClientConfiguration()
+    let sslContext = try NIOSSLContext(configuration: tlsConfiguration)
+
+    let postgresConfiguration = SQLPostgresConfiguration(
+        hostname: host,
+        port: port,
+        username: username,
+        password: password,
+        database: database,
+        tls: .require(sslContext)
+    )
+
+    app.databases.use(.postgres(configuration: postgresConfiguration), as: .psql)
+
+    app.addMigrations()
+    app.migrations.add(JobMetadataMigrate())
+    app.queues.use(.fluent())
+    try await app.autoMigrate()
+
     try routes(app)
 }

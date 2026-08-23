@@ -13,8 +13,8 @@ final class User: Model, Content, @unchecked Sendable {
     @Field(key: "phone")
     var phone: String
     
-    @Field(key: "password")
-    var password: String
+    @OptionalField(key: "password")
+    var password: String?
     
     @Children(for: \.$owner)
     var shops: [Shop]
@@ -26,7 +26,7 @@ final class User: Model, Content, @unchecked Sendable {
         
     }
     
-    init(id: UUID? = nil, name: String, phone: String, password: String){
+    init(id: UUID? = nil, name: String, phone: String, password: String?){
         self.id = id
         self.name = name
         self.phone = phone

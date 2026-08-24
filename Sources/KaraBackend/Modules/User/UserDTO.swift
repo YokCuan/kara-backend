@@ -10,7 +10,6 @@ struct CreateUserDTO: Content {
     let name: String
     let phone: String
     let password: String?
-}
 
 struct UserResponseDTO: Content {
     let id: UUID

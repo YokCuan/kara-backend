@@ -31,7 +31,7 @@ final class Shop: Model, Content, @unchecked Sendable {
     
     init(id: UUID? = nil, ownerId: UUID, name: String, address: String?, phone: String?){
         self.id = id
-        self.owner.id = ownerId
+        self.$owner.id = ownerId
         self.name = name
         self.address = address
         self.phone = phone

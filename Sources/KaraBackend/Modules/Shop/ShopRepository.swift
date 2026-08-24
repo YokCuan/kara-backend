@@ -20,9 +20,9 @@ struct ShopRepository: ShopRepositoryProtocol, Sendable {
         
         let newShop = try await sql.raw("""
             INSERT INTO shops
-            (id, ownerId, name, address, phone)
+            (id, owner_id, name, address, phone)
             VALUES (\(bind: id),\(bind: ownerId),\(bind: name),\(bind: address),\(bind: phone))
-            RETURNING id, ownerId, name, address, phone
+            RETURNING id, owner_id, name, address, phone
         """).first(decoding: Shop.self)
         
         guard let newShop else {
@@ -39,7 +39,7 @@ struct ShopRepository: ShopRepositoryProtocol, Sendable {
         
         let allShops = try await sql.raw("""
             SELECT 
-                id, ownerId, name, address, phone
+                id, owner_id, name, address, phone
             FROM shops
             """).all(decoding: Shop.self)
         
@@ -54,7 +54,7 @@ struct ShopRepository: ShopRepositoryProtocol, Sendable {
         
         let shop = try await sql.raw("""
             SELECT 
-                id, ownerId, name, address, phone
+                id, owner_id, name, address, phone
             FROM shops
             WHERE id = \(bind: id)
             """).first(decoding: Shop.self)
@@ -73,9 +73,9 @@ struct ShopRepository: ShopRepositoryProtocol, Sendable {
         
         let shop = try await sql.raw("""
             SELECT 
-                id, ownerId, name, address, phone
+                id, owner_id, name, address, phone
             FROM shops
-            WHERE ownerId = \(bind: ownerId)
+            WHERE owner_id = \(bind: ownerId)
             """).first(decoding: Shop.self)
         
         guard let shop else {
@@ -92,7 +92,7 @@ struct ShopRepository: ShopRepositoryProtocol, Sendable {
         
         let shop = try await sql.raw("""
             SELECT 
-                id, ownerId, name, address, phone
+                id, owner_id, name, address, phone
             FROM shops
             WHERE name = \(bind: name)
             """).first(decoding: Shop.self)

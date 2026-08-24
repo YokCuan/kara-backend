@@ -34,6 +34,7 @@ func routes(_ app: Application) throws {
     let expenseCategoryService = ExpenseCategoryService(expenseCategoryRepository: expenseCategoryRepository)
     let expenseService = ExpenseService(expenseRepository: expenseRepository)
     let expenseItemService = ExpenseItemService(expenseItemRepository: expenseItemRepository)
+    let cashflowExpenseService = CashflowExpenseService(expenseRepository: expenseRepository, expenseItemRepository: expenseItemRepository)
     
     let expenseCategoryController = ExpenseCategoryController(expenseCategoryService: expenseCategoryService)
     try app.register(collection: expenseCategoryController)
@@ -43,4 +44,7 @@ func routes(_ app: Application) throws {
     
     let expenseItemController = ExpenseItemController(expenseItemService: expenseItemService)
     try app.register(collection: expenseItemController)
+    
+    let cashflowExpenseController = CashflowExpenseController(cashflowExpenseService: cashflowExpenseService)
+    try app.register(collection: cashflowExpenseController)
 }

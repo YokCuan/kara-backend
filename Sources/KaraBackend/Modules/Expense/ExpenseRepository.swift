@@ -7,6 +7,8 @@ protocol ExpenseRepositoryProtocol: Sendable {
     func findAllByShop(_ shopId: UUID, on db: any Database) async throws -> [Expense]
     func findAllByShopAndCategory(_ shopId: UUID, expenseCategoryId: UUID, on db: any Database) async throws -> [Expense]
     func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> Expense?
+    func update(_ id: UUID, shopId: UUID, expenseCategoryId: UUID, supplierName: String?, supplierPhone: String?, paidAmount: Int, purchasedAt: Date, updatedBy: String, on db: any Database) async throws -> Expense
+    func deleteById(_ id: UUID, on db: any Database) async throws
 }
 
 struct ExpenseRepository: ExpenseRepositoryProtocol, Sendable {
@@ -66,17 +68,47 @@ struct ExpenseRepository: ExpenseRepositoryProtocol, Sendable {
             throw Abort(.internalServerError, reason: "Database connection error")
         }
         
-        let expense = try await sql.raw("""
+        return try await sql.raw("""
             SELECT 
                 id, shop_id, expense_category_id, supplier_name, supplier_phone, paid_amount, purchased_at, created_at, updated_at, created_by, updated_by
             FROM expenses
             WHERE id = \(bind: id) AND shop_id = \(bind: shopId)
             """).first(decoding: Expense.self)
+    }
+    
+    func update(_ id: UUID, shopId: UUID, expenseCategoryId: UUID, supplierName: String?, supplierPhone: String?, paidAmount: Int, purchasedAt: Date, updatedBy: String, on db: any Database) async throws -> Expense {
+        guard let sql = db as? any SQLDatabase else {
+            throw Abort(.internalServerError, reason: "Database connection error")
+        }
+        
+        let expense = try await sql.raw("""
+            UPDATE expenses
+            SET
+                expense_category_id = \(bind: expenseCategoryId), 
+                supplier_name = \(bind: supplierName), 
+                supplier_phone = \(bind: supplierPhone), 
+                paid_amount = \(bind: paidAmount), 
+                purchased_at = \(bind: purchasedAt), 
+                updated_by = \(bind: updatedBy)
+            WHERE id = \(bind: id) AND shop_id = \(bind: shopId)
+            RETURNING id, shop_id, expense_category_id, supplier_name, supplier_phone, paid_amount, purchased_at, created_at, updated_at, created_by, updated_by
+        """).first(decoding: Expense.self)
         
         guard let expense else {
-            return nil
+            throw Abort(.internalServerError, reason: "Failed to update expense")
         }
         
         return expense
+    }
+    
+    func deleteById(_ id: UUID, on db: any Database) async throws {
+        guard let sql = db as? any SQLDatabase else {
+            throw Abort(.internalServerError, reason: "Database connection error")
+        }
+        
+        try await sql.raw("""
+            DELETE FROM expenses
+            WHERE id = \(bind: id)
+            """).run()
     }
 }

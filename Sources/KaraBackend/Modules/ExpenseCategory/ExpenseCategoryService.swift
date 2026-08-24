@@ -1,55 +1,48 @@
-//
-//  ExpenseCategoryController 2.swift
-//  KaraBackend
-//
-//  Created by Sherin Olivia on 24/08/26.
-//
-
-
-import Vapor
 import Fluent
+import Vapor
 
-struct ExpenseCategoryController: RouteCollection {
-    let expenseCategoryService: any ExpenseCategoryServiceProtocol
+protocol ExpenseCategoryServiceProtocol: Sendable {
+    func create(_ dto: CreateExpenseCategoryDTO, on db: any Database) async throws -> ExpenseCategoryResponseDTO
+    func findAll(on db: any Database) async throws -> [ExpenseCategoryResponseDTO]
+    func findByName(name: String, on db: any Database) async throws -> ExpenseCategoryResponseDTO
+    func findByNameSlug(nameSlug: String, on db: any Database) async throws -> ExpenseCategoryResponseDTO
+    func deleteById(_ id: UUID, on db: any Database) async throws
+}
+
+struct ExpenseCategoryService: ExpenseCategoryServiceProtocol, Sendable {
+    let expenseCategoryRepository: any ExpenseCategoryRepositoryProtocol
     
-    func boot(routes: RoutesBuilder) throws {
-        let expenseCategories = routes.grouped("expense_categories")
-        
-        expenseCategories.post(use: create)
-        expenseCategories.get(use: findAll)
-        expenseCategories.delete(":id", use: deleteById)
-    }
-    
-    func create(req: Request) async throws -> ExpenseCategoryResponseDTO {
-        let data = try req.content.decode(CreateExpenseCategoryDTO.self)
-        return try await expenseCategories.create(data, on: req.db)
-    }
-    
-    func findAll(req: Request) async throws -> [ExpenseCategoryResponseDTO] {
-        let query = try req.query.decode(ExpenseCategoryByNameOrSlugDTO.self)
-        
-        if let name = query.name {
-            return try await expenseCategoryService.findByName(
-                query.name,
-                on: req.db
-            )
-        } else if let slug = query.nameSlug {
-            return try await expenseCategoryService.findByNameSlug(
-                query.nameSlug,
-                on: req.db
-            )
-        }
-        
-        return try await expenseCategoryService.findAll(
-            on: req.db
+    func create(_ data: CreateExpenseCategoryDTO, on db: any Database) async throws -> ExpenseCategoryResponseDTO {
+        let expenseCategory = try await expenseCategoryRepository.create(
+            name: data.name,
+            on: db
         )
+        
+        return try ExpenseCategoryResponseDTO(expenseCategory: expenseCategory)
     }
     
-    func deleteById(req: Request) async throws {
-        guard let id = req.parameters.get("id", as: UUID.self) else {
-            throw Abort(.badRequest, reason: "Invalid expense ID")
+    func findAll(on db: any Database) async throws -> [ExpenseCategoryResponseDTO] {
+        let expenseCategories = try await expenseCategoryRepository.findAll(on: db)
+        return try expenseCategories.map{expenseCategory in
+            try ExpenseCategoryResponseDTO(expenseCategory: expenseCategory)
         }
-        
-        return nil
     }
+    
+    func findByName(name: String, on db: any Database) async throws -> ExpenseCategoryResponseDTO {
+        guard let expenseCategory = try await expenseCategoryRepository.findByName(name: name, on: db) else {
+            throw Abort(.notFound, reason: "Category not found")
+        }
+        return try ExpenseCategoryResponseDTO(expenseCategory: expenseCategory)
+    }
+    
+    func findByNameSlug(nameSlug: String, on db: any Database) async throws -> ExpenseCategoryResponseDTO {
+        guard let expenseCategory = try await expenseCategoryRepository.findByNameSlug(nameSlug: nameSlug, on: db) else {
+            throw Abort(.notFound, reason: "Category not found")
+        }
+        return try ExpenseCategoryResponseDTO(expenseCategory: expenseCategory)
+    }
+    
+    func deleteById(_ id: UUID, on db: any Database) async throws {
+        try await expenseCategoryRepository.deleteById(id, on: db)
+    }    
 }

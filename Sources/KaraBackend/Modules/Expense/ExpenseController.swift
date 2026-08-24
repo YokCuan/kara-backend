@@ -9,7 +9,7 @@ struct ExpenseController: RouteCollection {
         
         expenses.post(use: create)
         expenses.get(use: findAll)
-        expenses.get(":id", use: findByIdAndShop)
+        expenses.get(":shopId", ":id", use: findByIdAndShop)
     }
     
     func create(req: Request) async throws -> ExpenseResponseDTO {
@@ -39,11 +39,13 @@ struct ExpenseController: RouteCollection {
             throw Abort(.badRequest, reason: "Invalid expense ID")
         }
         
-        let query = try req.query.decode(ExpenseByIdAndShopDTO.self)
+        guard let shopId = req.parameters.get("shopId", as: UUID.self) else {
+            throw Abort(.badRequest, reason: "Invalid shop ID")
+        }
         
         guard let expense = try await expenseService.findByIdAndShop(
             id,
-            shopId: query.shopId,
+            shopId: shopId,
             on: req.db
         ) else {
             throw Abort(.notFound, reason: "Expense not found")

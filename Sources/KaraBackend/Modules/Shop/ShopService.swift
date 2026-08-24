@@ -1,7 +1,7 @@
 import Fluent
 import Vapor
 
-protocol ShopServiceProtocol {
+protocol ShopServiceProtocol: Sendable {
     func create(_ dto: CreateShopDTO, on db: any Database) async throws -> ShopResponseDTO
     func findAll(on db: any Database) async throws -> [ShopResponseDTO]
     func findById(_ id: UUID, on db: any Database) async throws -> ShopResponseDTO?
@@ -9,7 +9,7 @@ protocol ShopServiceProtocol {
     func findByName(_ name: String, on db: any Database) async throws -> ShopResponseDTO?
 }
 
-struct ShopService: ShopServiceProtocol {
+struct ShopService: ShopServiceProtocol, Sendable {
     let shopRepository: any ShopRepositoryProtocol
     
     func create(_ data: CreateShopDTO, on db: any Database) async throws -> ShopResponseDTO {

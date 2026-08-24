@@ -2,14 +2,14 @@ import Fluent
 import Vapor
 import SQLKit
 
-protocol UserRepositoryProtocol {
+protocol UserRepositoryProtocol: Sendable {
     func create(name: String, phone: String, password: String?, on db: any Database) async throws -> User
     func findAll(on db: any Database) async throws -> [User]
     func findById(_ id: UUID, on db: any Database) async throws -> User?
     func findByPhone(_ phone: String, on db: any Database) async throws -> User?
 }
 
-struct UserRepository: UserRepositoryProtocol {
+struct UserRepository: UserRepositoryProtocol, Sendable {
     func create(name: String, phone: String, password: String?, on db: any Database) async throws -> User {
         guard let sql = db as? any SQLDatabase else {
             throw Abort(.internalServerError, reason: "Database connection error")

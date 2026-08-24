@@ -2,7 +2,7 @@ import Fluent
 import Vapor
 import SQLKit
 
-protocol ShopRepositoryProtocol {
+protocol ShopRepositoryProtocol: Sendable {
     func create(ownerId: UUID, name: String, address: String?, phone: String?, on db: any Database) async throws -> Shop
     func findAll(on db: any Database) async throws -> [Shop]
     func findById(_ id: UUID, on db: any Database) async throws -> Shop?
@@ -10,7 +10,7 @@ protocol ShopRepositoryProtocol {
     func findByName(_ name: String, on db: any Database) async throws -> Shop?
 }
 
-struct ShopRepository: ShopRepositoryProtocol {
+struct ShopRepository: ShopRepositoryProtocol, Sendable {
     func create(ownerId: UUID, name: String, address: String?, phone: String?, on db: any Database) async throws -> Shop {
         guard let sql = db as? any SQLDatabase else {
             throw Abort(.internalServerError, reason: "Database connection error")

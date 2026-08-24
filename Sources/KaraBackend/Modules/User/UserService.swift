@@ -1,14 +1,14 @@
 import Fluent
 import Vapor
 
-protocol UserServiceProtocol {
+protocol UserServiceProtocol: Sendable {
     func create(_ dto: CreateUserDTO, on db: any Database) async throws -> UserResponseDTO
     func findAll(on db: any Database) async throws -> [UserResponseDTO]
     func findById(_ id: UUID, on db: any Database) async throws -> UserResponseDTO?
     func findByPhone(_ phone: String, on db: any Database) async throws -> UserResponseDTO?
 }
 
-struct UserService: UserServiceProtocol {
+struct UserService: UserServiceProtocol, Sendable {
     let userRepository: any UserRepositoryProtocol
     
     func create(_ data: CreateUserDTO, on db: any Database) async throws -> UserResponseDTO {

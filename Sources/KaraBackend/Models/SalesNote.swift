@@ -2,9 +2,9 @@ import Fluent
 import Vapor
 
 enum Status: String, Codable, CaseIterable {
-    case paid
-    case dp
-    case notPaid
+    case paid = "paid"
+    case dpPaid = "dp_paid"
+    case notPaid = "not_paid"
 }
 
 final class SalesNote: Model, Content, @unchecked Sendable {

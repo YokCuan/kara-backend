@@ -18,13 +18,13 @@ struct CreateSalesNote: AsyncMigration {
             .field("paid_amount", .int, .required)
             .field("status", status, .required)
             .field("note_file_link", .string)
-            .field("due_at", .datetime, .required)
-            .field("sold_at", .datetime, .required)
+            .field("due_at", .datetime)
+            .field("sold_at", .datetime)
             .field("created_at", .datetime, .required)
             .field("updated_at", .datetime, .required)
             .field("created_by", .string, .required)
             .field("updated_by", .string, .required)
-            .field("is_deleted", .bool)
+            .field("is_deleted", .bool, .required)
             .create()
     }
     

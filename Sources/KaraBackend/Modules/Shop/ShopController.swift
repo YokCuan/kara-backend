@@ -9,7 +9,7 @@ struct ShopController: RouteCollection {
         shops.post(use: create)
         shops.get(use: findAll)
         shops.get(":id", use: findById)
-        shops.get(":ownerId", use: findByOwner)
+        shops.get("by-owner",":ownerId", use: findByOwner)
         shops.post("find-by-name", use: findByName)
     }
     

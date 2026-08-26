@@ -1,7 +1,7 @@
 import Fluent
-import Vapor
+import Foundation
 
-final class ExpenseCategory: Model, Content, @unchecked Sendable {
+final class ExpenseCategory: Model, @unchecked Sendable {
     static let schema = "expense_categories"
     
     @ID(key: .id)
@@ -20,7 +20,7 @@ final class ExpenseCategory: Model, Content, @unchecked Sendable {
         
     }
     
-    init(id: UUID? = nil, name: String, nameSlug: String){
+    init(id: UUID? = nil, name: String, nameSlug: String) {
         self.id = id
         self.name = name
         self.nameSlug = nameSlug

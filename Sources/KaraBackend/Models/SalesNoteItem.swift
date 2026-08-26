@@ -1,7 +1,7 @@
 import Fluent
-import Vapor
+import Foundation
 
-final class SalesNoteItem: Model, Content, @unchecked Sendable {
+final class SalesNoteItem: Model, @unchecked Sendable {
     static let schema = "sales_note_items"
     
     @ID(key: .id)
@@ -26,7 +26,7 @@ final class SalesNoteItem: Model, Content, @unchecked Sendable {
         
     }
     
-    init(id: UUID? = nil, salesNoteId: UUID, name: String, quantity: Int, unitPrice: Int, subtotal: Int){
+    init(id: UUID? = nil, salesNoteId: UUID, name: String, quantity: Int, unitPrice: Int, subtotal: Int) {
         self.id = id
         self.$salesNote.id = salesNoteId
         self.name = name

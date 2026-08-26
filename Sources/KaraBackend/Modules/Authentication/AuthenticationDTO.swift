@@ -5,6 +5,7 @@ struct RegisterDTO: Content {
     let phone: String
     let password: String?
     let shopName: String
+    let shopDescription: String?
     let shopAddress: String?
     let shopPhone: String?
 }

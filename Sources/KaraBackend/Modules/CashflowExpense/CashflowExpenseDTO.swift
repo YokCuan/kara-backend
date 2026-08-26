@@ -1,5 +1,9 @@
 import Vapor
 
+struct CreateCashflowExpenseItemDTO: Content {
+    let name: String
+}
+
 struct CreateCashflowExpenseDTO: Content {
     let shopId: UUID
     let expenseCategoryId: UUID
@@ -9,7 +13,7 @@ struct CreateCashflowExpenseDTO: Content {
     let purchasedAt: Date
     let createdBy: String
     let updatedBy: String
-    let items: [CreateExpenseItemDTO]
+    let items: [CreateCashflowExpenseItemDTO]
 }
 
 struct UpdateCashflowExpenseDTO: Content {
@@ -19,7 +23,7 @@ struct UpdateCashflowExpenseDTO: Content {
     let paidAmount: Int
     let purchasedAt: Date
     let updatedBy: String
-    let items: [CreateExpenseItemDTO]
+    let items: [CreateCashflowExpenseItemDTO]
 }
 
 struct CashflowExpenseResponseDTO: Content {

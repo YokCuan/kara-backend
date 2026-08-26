@@ -11,9 +11,15 @@ struct SeedExpenseCategories: AsyncMigration {
             ExpenseCategory(name: "Diambil untuk Pribadi", nameSlug: "diambil-untuk-pribadi"),
             ExpenseCategory(name: "Lainnya", nameSlug: "lainnya")
         ]
-    
+        
         for expenseCategory in expenseCategories {
-            try await expenseCategory.save(on: database)
+            let existingCategory = try await ExpenseCategory.query(on: database)
+                .filter(\.$nameSlug == expenseCategory.nameSlug)
+                .first()
+            
+            if existingCategory == nil {
+                try await expenseCategory.save(on: database)
+            }
         }
     }
     

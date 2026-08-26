@@ -6,6 +6,7 @@ struct CreateShop: AsyncMigration {
             .id()
             .field("owner_id", .uuid, .required, .references("users", "id"))
             .field("name", .string, .required)
+            .field("description", .string)
             .field("address", .string)
             .field("phone", .string)
             .create()

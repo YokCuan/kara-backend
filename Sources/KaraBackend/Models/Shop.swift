@@ -1,7 +1,7 @@
 import Fluent
-import Vapor
+import Foundation
 
-final class Shop: Model, Content, @unchecked Sendable {
+final class Shop: Model, @unchecked Sendable {
     static let schema = "shops"
     
     @ID(key: .id)
@@ -32,7 +32,7 @@ final class Shop: Model, Content, @unchecked Sendable {
         
     }
     
-    init(id: UUID? = nil, ownerId: UUID, name: String, description: String?, address: String?, phone: String?){
+    init(id: UUID? = nil, ownerId: UUID, name: String, description: String?, address: String?, phone: String?) {
         self.id = id
         self.$owner.id = ownerId
         self.name = name

@@ -1,13 +1,14 @@
 import Fluent
-import Vapor
+import Foundation
 
+// MARK: - Sales Note Status
 enum Status: String, Codable, CaseIterable {
     case paid = "paid"
     case dpPaid = "dp_paid"
     case notPaid = "not_paid"
 }
 
-final class SalesNote: Model, Content, @unchecked Sendable {
+final class SalesNote: Model, @unchecked Sendable {
     static let schema = "sales_notes"
     
     @ID(key: .id)
@@ -37,17 +38,17 @@ final class SalesNote: Model, Content, @unchecked Sendable {
     @OptionalField(key: "note_file_link")
     var noteFileLink: String?
     
-    @Field(key: "due_at")
+    @OptionalField(key: "due_at")
     var dueAt: Date?
     
-    @Field(key: "sold_at")
+    @OptionalField(key: "sold_at")
     var soldAt: Date?
     
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
     
     @Timestamp(key: "updated_at", on: .update)
-    var deletedAt: Date?
+    var updatedAt: Date?
     
     @Field(key: "created_by")
     var createdBy: String
@@ -65,7 +66,7 @@ final class SalesNote: Model, Content, @unchecked Sendable {
         
     }
     
-    init(id: UUID? = nil, shopId: UUID, identifier: String, customerName: String, customerPhone: String?, totalAmount: Int, paidAmount: Int, status: Status, noteFileLink: String?, dueAt: Date?, soldAt: Date?, createdAt: Date?, updatedAt: Date?, createdBy: String, updatedBy: String, isDeleted: Bool = false){
+    init(id: UUID? = nil, shopId: UUID, identifier: String, customerName: String, customerPhone: String?, totalAmount: Int, paidAmount: Int, status: Status, noteFileLink: String?, dueAt: Date?, soldAt: Date?, createdAt: Date?, updatedAt: Date?, createdBy: String, updatedBy: String, isDeleted: Bool = false) {
         self.id = id
         self.$shop.id = shopId
         self.identifier = identifier
@@ -78,6 +79,7 @@ final class SalesNote: Model, Content, @unchecked Sendable {
         self.dueAt = dueAt
         self.soldAt = soldAt
         self.createdAt = createdAt
+        self.updatedAt = updatedAt
         self.updatedBy = updatedBy
         self.createdBy = createdBy
         self.isDeleted = isDeleted

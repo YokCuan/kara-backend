@@ -20,6 +20,7 @@ struct ShopService: ShopServiceProtocol, Sendable {
         let shop = try await shopRepository.create(
             ownerId: data.ownerId,
             name: data.name,
+            description: data.description,
             address: data.address,
             phone: data.phone,
             on: db

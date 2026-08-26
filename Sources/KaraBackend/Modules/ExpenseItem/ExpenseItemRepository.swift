@@ -20,15 +20,15 @@ struct ExpenseItemRepository: ExpenseItemRepositoryProtocol, Sendable {
         let newExpenseItem = try await sql.raw("""
             INSERT INTO expense_items
             (id, expense_id, name)
-            VALUES (\(bind: id),\(bind: expenseId),\(bind: name))
+            VALUES (\(bind: id), \(bind: expenseId), \(bind: name))
             RETURNING id, expense_id, name
-        """).first(decoding: ExpenseItem.self)
+        """).first(decoding: ExpenseItemRow.self)
         
         guard let newExpenseItem else {
             throw Abort(.internalServerError, reason: "Failed to create expense item")
         }
         
-        return newExpenseItem
+        return newExpenseItem.expenseItem
     }
     
     func findAllByExpense(_ expenseId: UUID, on db: any Database) async throws -> [ExpenseItem] {
@@ -37,22 +37,23 @@ struct ExpenseItemRepository: ExpenseItemRepositoryProtocol, Sendable {
         }
         
         let allExpenseItems = try await sql.raw("""
-            SELECT 
+            SELECT
                 id, expense_id, name
             FROM expense_items
-            """).all(decoding: ExpenseItem.self)
+            WHERE expense_id = \(bind: expenseId)
+            """).all(decoding: ExpenseItemRow.self)
         
-        return allExpenseItems
+        return allExpenseItems.map(\.expenseItem)
     }
     
-    func deleteByExpense(_ expenseId: UUID,on db: any Database) async throws {
+    func deleteByExpense(_ expenseId: UUID, on db: any Database) async throws {
         guard let sql = db as? any SQLDatabase else {
             throw Abort(.internalServerError, reason: "Database connection error")
         }
         
         try await sql.raw("""
-                DELETE FROM expense_items
-                WHERE expense_id = \(bind: expenseId)
+            DELETE FROM expense_items
+            WHERE expense_id = \(bind: expenseId)
             """).run()
     }
     
@@ -65,5 +66,21 @@ struct ExpenseItemRepository: ExpenseItemRepositoryProtocol, Sendable {
             DELETE FROM expense_items
             WHERE id = \(bind: id)
             """).run()
+    }
+}
+
+private struct ExpenseItemRow: Decodable {
+    let id: UUID
+    let expenseId: UUID
+    let name: String
+    
+    var expenseItem: ExpenseItem {
+        ExpenseItem(id: id, expenseId: expenseId, name: name)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case expenseId = "expense_id"
+        case name
     }
 }

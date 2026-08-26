@@ -1,7 +1,7 @@
 import Fluent
-import Vapor
+import Foundation
 
-final class Expense: Model, Content, @unchecked Sendable {
+final class Expense: Model, @unchecked Sendable {
     static let schema = "expenses"
     
     @ID(key: .id)
@@ -40,14 +40,14 @@ final class Expense: Model, Content, @unchecked Sendable {
     @Children(for: \.$expense)
     var expenseItem: [ExpenseItem]
     
-    
     init() {
         
     }
     
-    init(id: UUID? = nil, expenseCategoryId: UUID, supplierName: String?, supplierPhone: String?, paidAmount: Int, purchasedAt: Date, createdAt: Date?, updatedAt: Date?, createdBy: String, updatedBy: String){
+    init(id: UUID? = nil, shopId: UUID, expenseCategoryId: UUID, supplierName: String?, supplierPhone: String?, paidAmount: Int, purchasedAt: Date, createdAt: Date?, updatedAt: Date?, createdBy: String, updatedBy: String) {
         self.id = id
-        self.expenseCategory.id = expenseCategoryId
+        self.$shop.id = shopId
+        self.$expenseCategory.id = expenseCategoryId
         self.supplierName = supplierName
         self.supplierPhone = supplierPhone
         self.paidAmount = paidAmount

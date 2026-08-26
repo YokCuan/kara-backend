@@ -13,26 +13,10 @@ struct CashflowExpenseController: RouteCollection {
     }
     
     func create(req: Request) async throws -> CashflowExpenseResponseDTO {
-        guard let shopId = req.parameters.get("shopId", as: UUID.self) else {
-            throw Abort(.badRequest, reason: "Invalid shop ID")
-        }
-        
         let dto = try req.content.decode(CreateCashflowExpenseDTO.self)
         
-        let correctedDTO = CreateCashflowExpenseDTO(
-            shopId: shopId,
-            expenseCategoryId: dto.expenseCategoryId,
-            supplierName: dto.supplierName,
-            supplierPhone: dto.supplierPhone,
-            paidAmount: dto.paidAmount,
-            purchasedAt: dto.purchasedAt,
-            createdBy: dto.createdBy,
-            updatedBy: dto.updatedBy,
-            items: dto.items
-        )
-        
         return try await cashflowExpenseService.create(
-            correctedDTO,
+            dto,
             on: req.db
         )
     }

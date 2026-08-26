@@ -4,6 +4,7 @@ import Fluent
 struct CreateShopDTO: Content {
     let ownerId: UUID
     let name: String
+    let description: String?
     let address: String?
     let phone: String?
 }
@@ -12,6 +13,7 @@ struct ShopResponseDTO: Content {
     let id: UUID
     let ownerId: UUID
     let name: String
+    let description: String?
     let address: String?
     let phone: String?
     
@@ -23,6 +25,7 @@ struct ShopResponseDTO: Content {
         self.id = id
         self.ownerId = shop.$owner.id
         self.name = shop.name
+        self.description = shop.description
         self.address = shop.address
         self.phone = shop.phone
     }

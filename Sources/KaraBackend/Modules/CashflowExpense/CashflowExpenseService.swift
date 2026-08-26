@@ -2,7 +2,7 @@ import Fluent
 import Vapor
 
 
-protocol CashflowExpenseServiceProtocol {
+protocol CashflowExpenseServiceProtocol: Sendable {
     func create(_ dto: CreateCashflowExpenseDTO, on db: any Database) async throws -> CashflowExpenseResponseDTO
     func update(_ expenseId: UUID, shopId: UUID, dto: UpdateCashflowExpenseDTO, on db: any Database) async throws -> CashflowExpenseResponseDTO
     func delete(_ expenseId: UUID, shopId: UUID, on db: any Database ) async throws
@@ -13,7 +13,14 @@ struct CashflowExpenseService: CashflowExpenseServiceProtocol, Sendable {
     let expenseItemRepository: any ExpenseItemRepositoryProtocol
     
     func create(_ dto: CreateCashflowExpenseDTO, on db: any Database) async throws -> CashflowExpenseResponseDTO {
-        try await db.transaction { tx in
+        guard !dto.items.isEmpty else {
+            throw Abort(.badRequest, reason: "Expense must contain at least one item")
+        }
+        guard dto.items.allSatisfy({ !$0.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) else {
+            throw Abort(.badRequest, reason: "Expense item name cannot be empty")
+        }
+        
+        return try await db.transaction { tx in
             let expense = try await expenseRepository.create(
                 shopId: dto.shopId,
                 expenseCategoryId: dto.expenseCategoryId,
@@ -50,7 +57,7 @@ struct CashflowExpenseService: CashflowExpenseServiceProtocol, Sendable {
     
     func update(_ expenseId: UUID, shopId: UUID, dto: UpdateCashflowExpenseDTO, on db: any Database) async throws -> CashflowExpenseResponseDTO {
         try await db.transaction { transaction in
-            guard let existingExpense = try await expenseRepository.findByIdAndShop(
+            guard let _ = try await expenseRepository.findByIdAndShop(
                 expenseId,
                 shopId: shopId,
                 on: transaction

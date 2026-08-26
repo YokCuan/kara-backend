@@ -6,6 +6,7 @@ struct CreateExpenseCategory: AsyncMigration {
             .id()
             .field("name", .string, .required)
             .field("name_slug", .string, .required)
+            .unique(on: "name_slug")
             .create()
     }
     

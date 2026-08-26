@@ -20,15 +20,15 @@ struct UserRepository: UserRepositoryProtocol, Sendable {
         let newUser = try await sql.raw("""
             INSERT INTO users
             (id, name, phone, password)
-            VALUES (\(bind: id),\(bind: name),\(bind: phone),\(bind: password))
-            RETURNING id, name, phone
-        """).first(decoding: User.self)
+            VALUES (\(bind: id), \(bind: name), \(bind: phone), \(bind: password))
+            RETURNING id, name, phone, password
+        """).first(decoding: UserRow.self)
         
         guard let newUser else {
             throw Abort(.internalServerError, reason: "Failed to create user")
         }
         
-        return newUser
+        return newUser.user
     }
     
     func findAll(on db: any Database) async throws -> [User] {
@@ -37,14 +37,13 @@ struct UserRepository: UserRepositoryProtocol, Sendable {
         }
         
         let allUsers = try await sql.raw("""
-            SELECT 
-                id, name, phone
+            SELECT
+                id, name, phone, password
             FROM users
-            """).all(decoding: User.self)
+            """).all(decoding: UserRow.self)
         
-        return allUsers
+        return allUsers.map(\.user)
     }
-    
     
     func findById(_ id: UUID, on db: any Database) async throws -> User? {
         guard let sql = db as? any SQLDatabase else {
@@ -52,17 +51,13 @@ struct UserRepository: UserRepositoryProtocol, Sendable {
         }
         
         let user = try await sql.raw("""
-            SELECT 
-                id, name, phone
+            SELECT
+                id, name, phone, password
             FROM users
             WHERE id = \(bind: id)
-            """).first(decoding: User.self)
+            """).first(decoding: UserRow.self)
         
-        guard let user else {
-            return nil
-        }
-        
-        return user
+        return user?.user
     }
     
     func findByPhone(_ phone: String, on db: any Database) async throws -> User? {
@@ -71,16 +66,23 @@ struct UserRepository: UserRepositoryProtocol, Sendable {
         }
         
         let user = try await sql.raw("""
-            SELECT 
-                id, name, phone
+            SELECT
+                id, name, phone, password
             FROM users
             WHERE phone = \(bind: phone)
-            """).first(decoding: User.self)
+            """).first(decoding: UserRow.self)
         
-        guard let user else {
-            return nil
-        }
-        
-        return user
+        return user?.user
+    }
+}
+
+private struct UserRow: Decodable {
+    let id: UUID
+    let name: String
+    let phone: String
+    let password: String?
+    
+    var user: User {
+        User(id: id, name: name, phone: phone, password: password)
     }
 }

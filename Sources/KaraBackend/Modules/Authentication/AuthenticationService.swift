@@ -28,6 +28,7 @@ struct AuthenticationService: AuthenticationServiceProtocol {
                 CreateShopDTO(
                     ownerId: user.id,
                     name: dto.shopName,
+                    description: dto.shopDescription,
                     address: dto.shopAddress,
                     phone: dto.shopPhone
                 ),

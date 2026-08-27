@@ -3,7 +3,8 @@ import Fluent
 
 struct ShopController: RouteCollection {
     let shopService: any ShopServiceProtocol
-    func boot(routes: RoutesBuilder) throws {
+    
+    func boot(routes: any RoutesBuilder) throws {
         let shops = routes.grouped("shops")
         
         shops.post(use: create)

@@ -4,7 +4,7 @@ import Fluent
 struct ExpenseItemController: RouteCollection {
     let expenseItemService: any ExpenseItemServiceProtocol
     
-    func boot(routes: RoutesBuilder) throws {
+    func boot(routes: any RoutesBuilder) throws {
         let expenseItems = routes.grouped("expense_items")
         
         expenseItems.post(use: create)

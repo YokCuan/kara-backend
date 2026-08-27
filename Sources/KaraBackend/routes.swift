@@ -47,4 +47,21 @@ func routes(_ app: Application) throws {
     
     let cashflowExpenseController = CashflowExpenseController(cashflowExpenseService: cashflowExpenseService)
     try app.register(collection: cashflowExpenseController)
+    
+    //    MARK: - Sales Notes Related
+    let salesNoteRepository = SalesNoteRepository()
+    let salesNoteItemRepository = SalesNoteItemRepository()
+    
+    let salesNoteService = SalesNoteService(salesNoteRepository: salesNoteRepository)
+    let salesNoteItemService = SalesNoteItemService(salesNoteItemRepository: salesNoteItemRepository)
+    let cashflowSalesNoteService = CashflowSalesNoteService(salesNoteRepository: salesNoteRepository, salesNoteItemRepository: salesNoteItemRepository)
+    
+    let salesNoteController = SalesNoteController(salesNoteService: salesNoteService)
+    try app.register(collection: salesNoteController)
+    
+    let salesNoteItemController = SalesNoteItemController(salesNoteItemService: salesNoteItemService)
+    try app.register(collection: salesNoteItemController)
+    
+    let cashflowSalesNoteController = CashflowSalesNoteController(cashflowSalesNoteService: cashflowSalesNoteService)
+    try app.register(collection: cashflowSalesNoteController)
 }

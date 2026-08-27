@@ -4,7 +4,7 @@ import Fluent
 struct CashflowExpenseController: RouteCollection {
     let cashflowExpenseService: any CashflowExpenseServiceProtocol
     
-    func boot(routes: RoutesBuilder) throws {
+    func boot(routes: any RoutesBuilder) throws {
         let cashflowExpenses = routes.grouped("cashflow_expenses")
         
         cashflowExpenses.post(use: create)

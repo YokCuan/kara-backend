@@ -1,8 +1,11 @@
 $kind: http-request
-url: "{{baseUrl}}/cashflow_expenses"
+name: Create Cashflow Expense
+url: "{{baseUrl}}/cashflow_expenses/:shopId"
 method: POST
 headers:
   Content-Type: application/json
+pathVariables:
+  shopId: ""
 body:
   type: json
   content: |-

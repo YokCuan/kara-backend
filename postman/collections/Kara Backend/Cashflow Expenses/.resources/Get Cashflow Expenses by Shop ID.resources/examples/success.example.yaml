@@ -1,0 +1,54 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/cashflow_expenses/:shopId"
+  method: GET
+  headers:
+    Content-Type: application/json
+  pathVariables:
+    shopId: 28F6C248-5D46-40C5-8FA3-323BFDF3F9CC
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "814"
+    connection: keep-alive
+    date: Thu, 27 Aug 2026 07:17:28 GMT
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "expense": {
+            "expenseCategoryId": "62A5D7C0-5122-4D64-AC2F-B040AF74A4E5",
+            "shopId": "28F6C248-5D46-40C5-8FA3-323BFDF3F9CC",
+            "paidAmount": 50000,
+            "createdBy": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+            "updatedBy": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+            "supplierPhone": "08012345678",
+            "id": "599F0D9E-76ED-48C9-B042-5527634B79E0",
+            "supplierName": "Supplier Co.",
+            "purchasedAt": "2024-01-01T00:00:00Z",
+            "createdAt": "2026-08-26T04:17:19Z",
+            "updatedAt": "2026-08-26T04:21:36Z"
+          },
+          "expenseItems": [
+            {
+              "expenseId": "599F0D9E-76ED-48C9-B042-5527634B79E0",
+              "id": "3CE5F739-19C7-45F5-877E-3C7322EC81FF",
+              "name": "Gun Powder"
+            },
+            {
+              "expenseId": "599F0D9E-76ED-48C9-B042-5527634B79E0",
+              "id": "42AA9462-3ECF-4389-A265-8EA5D1089764",
+              "name": "Casket"
+            },
+            {
+              "expenseId": "599F0D9E-76ED-48C9-B042-5527634B79E0",
+              "id": "2827A265-64B7-447A-A2F5-33A5087C0BA0",
+              "name": "Crates"
+            }
+          ]
+        }
+      ]
+order: 1787815102384

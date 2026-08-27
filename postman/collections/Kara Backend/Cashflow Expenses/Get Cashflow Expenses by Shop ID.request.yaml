@@ -1,0 +1,9 @@
+$kind: http-request
+url: "{{baseUrl}}/cashflow_expenses/:shopId"
+method: GET
+headers:
+  Content-Type: application/json
+pathVariables:
+  shopId: 28F6C248-5D46-40C5-8FA3-323BFDF3F9CC
+examples: .resources/Get Cashflow Expenses by Shop ID.resources/examples
+order: 1212

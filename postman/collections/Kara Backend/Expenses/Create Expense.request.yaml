@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{baseUrl}}/expenses"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "shopId": "{{shopId}}",
+      "expenseCategoryId": "{{expenseCategoryId}}",
+      "supplierName": "Supplier Co.",
+      "supplierPhone": "08012345678",
+      "paidAmount": 50000,
+      "purchasedAt": "2024-01-01T00:00:00Z",
+      "createdBy": "admin",
+      "updatedBy": "admin"
+    }
+order: 1000

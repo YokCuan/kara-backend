@@ -1,0 +1,76 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/cashflow_expenses/:shopId/:id"
+  method: PATCH
+  headers:
+    Content-Type: application/json
+  pathVariables:
+    shopId: "{{shopId}}"
+    id: "{{expenseId}}"
+  body:
+    type: json
+    content: |-
+      {
+        "expenseCategoryId": "{{expenseCategoryId}}",
+        "supplierName": "Supplier Co.",
+        "supplierPhone": "08012345678",
+        "paidAmount": 50000,
+        "purchasedAt": "2024-01-01T00:00:00Z",
+        "createdBy": "{{userId}}",
+        "updatedBy": "{{userId}}",
+        "items": [
+          {
+            "name": "Gun Powder"
+          },
+          {
+            "name": "Casket"
+          },
+          {
+            "name": "Crates"
+          }
+        ]
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "812"
+    connection: keep-alive
+    date: Wed, 26 Aug 2026 04:21:38 GMT
+  body:
+    type: text
+    content: |-
+      {
+          "expense": {
+              "supplierPhone": "08012345678",
+              "purchasedAt": "2024-01-01T00:00:00Z",
+              "createdAt": "2026-08-26T04:17:19Z",
+              "createdBy": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+              "expenseCategoryId": "62A5D7C0-5122-4D64-AC2F-B040AF74A4E5",
+              "id": "599F0D9E-76ED-48C9-B042-5527634B79E0",
+              "shopId": "28F6C248-5D46-40C5-8FA3-323BFDF3F9CC",
+              "updatedAt": "2026-08-26T04:21:36Z",
+              "supplierName": "Supplier Co.",
+              "updatedBy": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+              "paidAmount": 50000
+          },
+          "expenseItems": [
+              {
+                  "expenseId": "599F0D9E-76ED-48C9-B042-5527634B79E0",
+                  "name": "Gun Powder",
+                  "id": "3CE5F739-19C7-45F5-877E-3C7322EC81FF"
+              },
+              {
+                  "expenseId": "599F0D9E-76ED-48C9-B042-5527634B79E0",
+                  "name": "Casket",
+                  "id": "42AA9462-3ECF-4389-A265-8EA5D1089764"
+              },
+              {
+                  "expenseId": "599F0D9E-76ED-48C9-B042-5527634B79E0",
+                  "name": "Crates",
+                  "id": "2827A265-64B7-447A-A2F5-33A5087C0BA0"
+              }
+          ]
+      }
+order: 1000

@@ -1,0 +1,66 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/cashflow_expenses"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "shopId": "{{shopId}}",
+        "expenseCategoryId": "{{expenseCategoryId}}",
+        "supplierName": "Supplier Co.",
+        "supplierPhone": "08012345678",
+        "paidAmount": 50000,
+        "purchasedAt": "2024-01-01T00:00:00Z",
+        "createdBy": "{{userId}}",
+        "updatedBy": "{{userId}}",
+        "items": [
+          {
+            "name": "Gun Powder"
+          },
+          {
+            "name": "Casket"
+          }
+        ]
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "699"
+    connection: keep-alive
+    date: Wed, 26 Aug 2026 04:17:21 GMT
+  body:
+    type: text
+    content: |-
+      {
+          "expense": {
+              "paidAmount": 50000,
+              "createdAt": "2026-08-26T04:17:19Z",
+              "expenseCategoryId": "62A5D7C0-5122-4D64-AC2F-B040AF74A4E5",
+              "createdBy": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+              "id": "599F0D9E-76ED-48C9-B042-5527634B79E0",
+              "purchasedAt": "2024-01-01T00:00:00Z",
+              "supplierName": "Supplier Co.",
+              "updatedAt": "2026-08-26T04:17:19Z",
+              "updatedBy": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+              "supplierPhone": "08012345678",
+              "shopId": "28F6C248-5D46-40C5-8FA3-323BFDF3F9CC"
+          },
+          "expenseItems": [
+              {
+                  "name": "Gun Powder",
+                  "id": "E807AB35-851C-49B1-B347-A8686A76E6D8",
+                  "expenseId": "599F0D9E-76ED-48C9-B042-5527634B79E0"
+              },
+              {
+                  "name": "Casket",
+                  "id": "EC7D38BC-B11D-46E4-BF22-4396124FF15D",
+                  "expenseId": "599F0D9E-76ED-48C9-B042-5527634B79E0"
+              }
+          ]
+      }
+order: 1000

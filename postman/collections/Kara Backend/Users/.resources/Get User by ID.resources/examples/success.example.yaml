@@ -1,0 +1,23 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/users/:id"
+  method: GET
+  pathVariables:
+    id: "{{userId}}"
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "104"
+    connection: keep-alive
+    date: Wed, 26 Aug 2026 02:49:00 GMT
+  body:
+    type: text
+    content: |-
+      {
+          "name": "Catherine Augustus Andorhal",
+          "id": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+          "phone": "08012345678"
+      }
+order: 1000

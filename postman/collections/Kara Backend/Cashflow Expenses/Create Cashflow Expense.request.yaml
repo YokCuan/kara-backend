@@ -1,0 +1,28 @@
+$kind: http-request
+url: "{{baseUrl}}/cashflow_expenses"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "shopId": "{{shopId}}",
+      "expenseCategoryId": "{{expenseCategoryId}}",
+      "supplierName": "Supplier Co.",
+      "supplierPhone": "08012345678",
+      "paidAmount": 50000,
+      "purchasedAt": "2024-01-01T00:00:00Z",
+      "createdBy": "{{userId}}",
+      "updatedBy": "{{userId}}",
+      "items": [
+        {
+          "name": "Gun Powder"
+        },
+        {
+          "name": "Casket"
+        }
+      ]
+    }
+examples: ./.resources/Create Cashflow Expense.resources/examples
+order: 1000

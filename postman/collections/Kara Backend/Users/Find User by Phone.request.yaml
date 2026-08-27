@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{baseUrl}}/users/find-by-phone"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "phone": "08012345678"
+    }
+order: 4000

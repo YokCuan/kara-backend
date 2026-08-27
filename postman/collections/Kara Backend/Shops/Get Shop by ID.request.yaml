@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/shops/:id"
+method: GET
+pathVariables:
+  id: "{{shopId}}"
+examples: ./.resources/Get Shop by ID.resources/examples
+order: 3000

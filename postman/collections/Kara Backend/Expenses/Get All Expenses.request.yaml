@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{baseUrl}}/expenses?shopId={{shopId}}"
+method: GET
+queryParams:
+  - key: shopId
+    value: "{{shopId}}"
+  - key: expenseCategoryId
+    value: "{{expenseCategoryId}}"
+    disabled: true
+order: 2000

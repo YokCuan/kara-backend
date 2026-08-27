@@ -1,0 +1,26 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/shops"
+  method: GET
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "214"
+    connection: keep-alive
+    date: Wed, 26 Aug 2026 02:47:18 GMT
+  body:
+    type: text
+    content: |-
+      [
+          {
+              "phone": "08012345678",
+              "address": "Eastside, DisCity",
+              "id": "28F6C248-5D46-40C5-8FA3-323BFDF3F9CC",
+              "name": "Andorhal Weaponry",
+              "description": "#1 Weaponry in DisCity",
+              "ownerId": "E7E66842-D5F5-410F-A38F-A3F36220B46B"
+          }
+      ]
+order: 1000

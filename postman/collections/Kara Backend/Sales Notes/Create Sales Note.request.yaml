@@ -1,0 +1,23 @@
+$kind: http-request
+name: Create Sales Note
+order: 1000
+method: POST
+url: '{{baseUrl}}/sales_notes'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "shopId": "{{shopId}}",
+      "customerName": "John Doe",
+      "customerPhone": "+1234567890",
+      "totalAmount": 150000,
+      "paidAmount": 100000,
+      "noteFileLink": null,
+      "dueAt": "2026-09-30T00:00:00Z",
+      "soldAt": "2026-08-27T00:00:00Z",
+      "createdBy": "admin",
+      "updatedBy": "admin"
+    }

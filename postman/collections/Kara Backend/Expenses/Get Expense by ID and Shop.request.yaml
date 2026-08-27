@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/expenses/:shopId/:id"
+method: GET
+pathVariables:
+  shopId: "{{shopId}}"
+  id: "{{expenseId}}"
+order: 3000

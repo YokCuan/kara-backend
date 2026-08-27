@@ -1,0 +1,5 @@
+$kind: http-request
+url: "{{baseUrl}}/expense_categories"
+method: GET
+examples: ./.resources/Get All Expense Categories.resources/examples
+order: 2000

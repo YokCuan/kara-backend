@@ -3,7 +3,8 @@ import Fluent
 
 struct UserController: RouteCollection {
     let userService: any UserServiceProtocol
-    func boot(routes: RoutesBuilder) throws {
+    
+    func boot(routes: any RoutesBuilder) throws {
         let users = routes.grouped("users")
         
         users.post(use: create)

@@ -5,7 +5,7 @@ import Fluent
 struct AuthenticationController: RouteCollection {
     let authenticationService: any AuthenticationServiceProtocol
 
-    func boot(routes: RoutesBuilder) throws {
+    func boot(routes: any RoutesBuilder) throws {
         let auth = routes.grouped("auth")
 
         auth.post("register", use: register)

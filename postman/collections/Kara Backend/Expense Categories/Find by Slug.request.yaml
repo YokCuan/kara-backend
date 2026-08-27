@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/expense_categories/by-slug?nameSlug=food-beverages"
+method: GET
+queryParams:
+  nameSlug: food-beverages
+order: 4000

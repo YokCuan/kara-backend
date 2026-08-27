@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{baseUrl}}/expense_categories"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Food & Beverages",
+      "nameSlug": "food-beverages"
+    }
+order: 1000

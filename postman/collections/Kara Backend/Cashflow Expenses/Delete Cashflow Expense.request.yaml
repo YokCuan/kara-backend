@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/cashflow_expenses/:shopId/:id"
+method: DELETE
+pathVariables:
+  shopId: "{{shopId}}"
+  id: "{{expenseId}}"
+order: 3000

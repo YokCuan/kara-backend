@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/shops/by-owner/:ownerId"
+method: GET
+pathVariables:
+  ownerId: "{{userId}}"
+examples: ./.resources/Get Shop by Owner.resources/examples
+order: 4000

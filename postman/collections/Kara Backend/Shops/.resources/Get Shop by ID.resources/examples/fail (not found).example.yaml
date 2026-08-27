@@ -1,0 +1,22 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/shops/:id"
+  method: GET
+  pathVariables:
+    id: "{{shopId}}"
+response:
+  statusCode: 404
+  statusText: Not Found
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "40"
+    connection: keep-alive
+    date: Wed, 26 Aug 2026 02:48:31 GMT
+  body:
+    type: text
+    content: |-
+      {
+          "error": true,
+          "reason": "Shop not found"
+      }
+order: 1000

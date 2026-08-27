@@ -1,0 +1,53 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/expense_categories"
+  method: GET
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "668"
+    connection: keep-alive
+    date: Wed, 26 Aug 2026 02:46:05 GMT
+  body:
+    type: text
+    content: |-
+      [
+          {
+              "id": "62A5D7C0-5122-4D64-AC2F-B040AF74A4E5",
+              "name": "Bahan Baku",
+              "nameSlug": "bahan-baku"
+          },
+          {
+              "id": "93C2F652-EAAC-4A59-9BE5-5A23F0AE5A85",
+              "name": "Gaji Pekerja",
+              "nameSlug": "gaji-pekerja"
+          },
+          {
+              "id": "E9C92AE8-BB6B-4687-8062-D55E901E8B7E",
+              "name": "Kemasan",
+              "nameSlug": "kemasan"
+          },
+          {
+              "id": "A1EF7F7C-93D7-4ACA-8E95-4162F73EFB8B",
+              "name": "Listrik, Gas, Air, Sewa",
+              "nameSlug": "listrik-gas-air-sewa"
+          },
+          {
+              "id": "E8D25F34-C9B6-41C5-AB67-A90340A1A40E",
+              "name": "Pengiriman",
+              "nameSlug": "pengiriman"
+          },
+          {
+              "id": "98C38E8D-FB4E-468F-B00B-CDDB31D099AA",
+              "name": "Diambil untuk Pribadi",
+              "nameSlug": "diambil-untuk-pribadi"
+          },
+          {
+              "id": "982B654F-9DAB-4BC1-8CA9-1F1C4A158CC1",
+              "name": "Lainnya",
+              "nameSlug": "lainnya"
+          }
+      ]
+order: 1000

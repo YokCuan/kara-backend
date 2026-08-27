@@ -1,0 +1,5 @@
+$kind: http-request
+name: Get All Sales Notes by Shop
+order: 2000
+method: GET
+url: '{{baseUrl}}/sales_notes/{{shopId}}'

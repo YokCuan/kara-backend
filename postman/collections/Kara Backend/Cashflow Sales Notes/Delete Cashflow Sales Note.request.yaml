@@ -1,0 +1,5 @@
+$kind: http-request
+name: Delete Cashflow Sales Note
+order: 2000
+method: DELETE
+url: '{{baseUrl}}/cashflow_sales_notes/{{shopId}}/{{salesNoteId}}'

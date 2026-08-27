@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/shops"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "ownerId": "{{userId}}",
+      "name": "My Shop",
+      "address": "123 Main St",
+      "phone": "08012345678"
+    }
+order: 1000

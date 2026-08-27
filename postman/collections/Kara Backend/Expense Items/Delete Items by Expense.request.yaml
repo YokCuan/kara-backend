@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/expense_items/by-expense/:expenseId"
+method: DELETE
+pathVariables:
+  expenseId: "{{expenseId}}"
+order: 3000

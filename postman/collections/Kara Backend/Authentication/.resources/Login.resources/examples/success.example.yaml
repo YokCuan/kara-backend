@@ -1,0 +1,30 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/auth/login"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "phone": "08012345678",
+        "password": "secret123"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "104"
+    connection: keep-alive
+    date: Thu, 27 Aug 2026 02:38:53 GMT
+  body:
+    type: text
+    content: |-
+      {
+          "id": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+          "name": "Catherine Augustus Andorhal",
+          "phone": "08012345678"
+      }
+order: 1000

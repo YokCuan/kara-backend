@@ -3,12 +3,10 @@ import Fluent
 
 struct CreateSalesNoteDTO: Content {
     let shopId: UUID
-    let identifier: String
-    let customerName: String?
+    let customerName: String
     let customerPhone: String?
     let totalAmount: Int
     let paidAmount: Int
-    let status: Status
     let noteFileLink: String?
     let dueAt: Date?
     let soldAt: Date
@@ -20,7 +18,7 @@ struct SalesNoteResponseDTO: Content {
     let id: UUID
     let shopId: UUID
     let identifier: String
-    let customerName: String?
+    let customerName: String
     let customerPhone: String?
     let totalAmount: Int
     let paidAmount: Int

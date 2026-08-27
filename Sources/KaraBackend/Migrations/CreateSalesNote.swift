@@ -25,6 +25,7 @@ struct CreateSalesNote: AsyncMigration {
             .field("created_by", .string, .required)
             .field("updated_by", .string, .required)
             .field("is_deleted", .bool, .required)
+            .unique(on: "shop_id", "identifier")
             .create()
     }
     

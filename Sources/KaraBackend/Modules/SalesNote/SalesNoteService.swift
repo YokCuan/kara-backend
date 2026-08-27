@@ -13,38 +13,31 @@ struct SalesNoteService: SalesNoteServiceProtocol, Sendable {
     let salesNoteRepository: any SalesNoteRepositoryProtocol
     
     func create(_ data: CreateSalesNoteDTO, on db: any Database) async throws -> SalesNoteResponseDTO {
-        let status: Status
-        if data.paidAmount == data.totalAmount {
-            status = Status.paid
-        } else if data.paidAmount == 0 {
-            status = Status.notPaid
-        } else {
-            status = Status.dpPaid
+        try await db.transaction { tx in
+            let status = status(totalAmount: data.totalAmount, paidAmount: data.paidAmount)
+            
+            let salesNote = try await salesNoteRepository.create(
+                shopId: data.shopId,
+                customerName: data.customerName,
+                customerPhone: data.customerPhone,
+                totalAmount: data.totalAmount,
+                paidAmount: data.paidAmount,
+                status: status,
+                noteFileLink: data.noteFileLink,
+                dueAt: data.dueAt,
+                soldAt: data.soldAt,
+                createdBy: data.createdBy,
+                updatedBy: data.updatedBy,
+                on: tx
+            )
+            
+            return try SalesNoteResponseDTO(salesNote: salesNote)
         }
-        
-        
-        let salesNote = try await salesNoteRepository.create(
-            shopId: data.shopId,
-            identifier: data.identifier,
-            customerName: data.customerName,
-            customerPhone: data.customerPhone,
-            totalAmount: data.totalAmount,
-            paidAmount: data.paidAmount,
-            status: status,
-            noteFileLink: data.noteFileLink ?? "",
-            dueAt: data.dueAt,
-            soldAt: data.soldAt,
-            createdBy: data.createdBy,
-            updatedBy: data.updatedBy,
-            on: db
-        )
-        
-        return try SalesNoteResponseDTO(salesNote: salesNote)
     }
     
     func findAllByShop(_ shopId: UUID, on db: any Database) async throws -> [SalesNoteResponseDTO] {
         let salesNotes = try await salesNoteRepository.findAllByShop(shopId, on: db)
-        return try salesNotes.map{salesNote in
+        return try salesNotes.map { salesNote in
             try SalesNoteResponseDTO(salesNote: salesNote)
         }
     }
@@ -65,5 +58,15 @@ struct SalesNoteService: SalesNoteServiceProtocol, Sendable {
     
     func softDeleteByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws {
         return try await salesNoteRepository.softDeleteByIdAndShop(id, shopId: shopId, on: db)
+    }
+    
+    private func status(totalAmount: Int, paidAmount: Int) -> Status {
+        if paidAmount == totalAmount {
+            return .paid
+        } else if paidAmount == 0 {
+            return .notPaid
+        } else {
+            return .dpPaid
+        }
     }
 }

@@ -25,7 +25,7 @@ struct SalesNoteRepository: SalesNoteRepositoryProtocol, Sendable {
         let newSalesNote = try await sql.raw("""
             INSERT INTO sales_notes
             (id, shop_id, identifier, customer_name, customer_phone, total_amount, paid_amount, status, note_file_link, due_at, sold_at, created_at, updated_at, created_by, updated_by, is_deleted)
-            VALUES (\(bind: id), \(bind: shopId), \(bind: identifier), \(bind: customerName), \(bind: customerPhone), \(bind: totalAmount), \(bind: paidAmount), \(bind: status), \(bind: noteFileLink), \(bind: dueAt), \(bind: soldAt), \(bind: now), \(bind: now), \(bind: createdBy), \(bind: updatedBy), false)
+            VALUES (\(bind: id), \(bind: shopId), \(bind: identifier), \(bind: customerName), \(bind: customerPhone), \(bind: totalAmount), \(bind: paidAmount), \(bind: status.rawValue)::status, \(bind: noteFileLink), \(bind: dueAt), \(bind: soldAt), \(bind: now), \(bind: now), \(bind: createdBy), \(bind: updatedBy), false)
             RETURNING id, shop_id, identifier, customer_name, customer_phone, total_amount, paid_amount, status, note_file_link, due_at, sold_at, created_at, updated_at, created_by, updated_by, is_deleted
         """).first(decoding: SalesNoteRow.self)
         

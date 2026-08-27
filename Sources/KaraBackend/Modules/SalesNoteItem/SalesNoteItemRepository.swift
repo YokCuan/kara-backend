@@ -23,13 +23,13 @@ struct SalesNoteItemRepository: SalesNoteItemRepositoryProtocol, Sendable {
             (id, sales_note_id, name, quantity, unit_price, subtotal)
             VALUES (\(bind: id), \(bind: salesNoteId), \(bind: name), \(bind: quantity), \(bind: unitPrice), \(bind: subtotal))
             RETURNING id, sales_note_id, name, quantity, unit_price, subtotal
-        """).first(decoding: SalesNoteItem.self)
+        """).first(decoding: SalesNoteItemRow.self)
         
         guard let newSalesNoteItem else {
-            throw Abort(.internalServerError, reason: "Failed to create expense item")
+            throw Abort(.internalServerError, reason: "Failed to create sales note item")
         }
         
-        return newSalesNoteItem
+        return newSalesNoteItem.salesNoteItem
     }
     
     func findAllBySalesNote(_ salesNoteId: UUID, on db: any Database) async throws -> [SalesNoteItem] {
@@ -42,9 +42,9 @@ struct SalesNoteItemRepository: SalesNoteItemRepositoryProtocol, Sendable {
                 id, sales_note_id, name, quantity, unit_price, subtotal
             FROM sales_note_items
             WHERE sales_note_id = \(bind: salesNoteId)
-            """).all(decoding: SalesNoteItem.self)
+            """).all(decoding: SalesNoteItemRow.self)
         
-        return allSalesNoteItems
+        return allSalesNoteItems.map(\.salesNoteItem)
     }
     
     func deleteBySalesNote(_ salesNoteId: UUID, on db: any Database) async throws {
@@ -67,5 +67,34 @@ struct SalesNoteItemRepository: SalesNoteItemRepositoryProtocol, Sendable {
             DELETE FROM sales_note_items
             WHERE id = \(bind: id)
             """).run()
+    }
+}
+
+private struct SalesNoteItemRow: Decodable {
+    let id: UUID
+    let salesNoteId: UUID
+    let name: String
+    let quantity: Int
+    let unitPrice: Int
+    let subtotal: Int
+    
+    var salesNoteItem: SalesNoteItem {
+        SalesNoteItem(
+            id: id,
+            salesNoteId: salesNoteId,
+            name: name,
+            quantity: quantity,
+            unitPrice: unitPrice,
+            subtotal: subtotal
+        )
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case salesNoteId = "sales_note_id"
+        case name
+        case quantity
+        case unitPrice = "unit_price"
+        case subtotal
     }
 }

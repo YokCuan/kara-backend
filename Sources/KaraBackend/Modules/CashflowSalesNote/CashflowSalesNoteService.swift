@@ -3,6 +3,7 @@ import Vapor
 
 protocol CashflowSalesNoteServiceProtocol: Sendable {
     func create(_ dto: CreateCashflowSalesNoteDTO, on db: any Database) async throws -> CashflowSalesNoteResponseDTO
+    func findAllByShop(_ shopId: UUID, on db: any Database) async throws -> [CashflowSalesNoteResponseDTO]
     func softDelete(_ salesNoteId: UUID, shopId: UUID, on db: any Database) async throws
 }
 
@@ -63,6 +64,34 @@ struct CashflowSalesNoteService: CashflowSalesNoteServiceProtocol, Sendable {
             )
         }
     }
+    
+    func findAllByShop(_ shopId: UUID, on db: any Database) async throws -> [CashflowSalesNoteResponseDTO] {
+        let salesNotes = try await salesNoteRepository.findAllByShop(shopId, on: db)
+        
+        var results: [CashflowSalesNoteResponseDTO] = []
+        
+        for salesNote in salesNotes {
+            guard let salesNoteId = salesNote.id else {
+                throw Abort(.internalServerError, reason: "Sales Note ID is missing")
+            }
+            
+            let salesNoteItems = try await salesNoteItemRepository.findAllBySalesNote(salesNoteId, on: db)
+            
+            let salesNoteItemDTOs = try salesNoteItems.map {
+                try SalesNoteItemResponseDTO(salesNoteItem: $0)
+            }
+            
+            results.append(
+                CashflowSalesNoteResponseDTO(
+                    salesNote: try SalesNoteResponseDTO(salesNote: salesNote),
+                    salesNoteItems: salesNoteItemDTOs
+                )
+            )
+        }
+        
+        return results
+    }
+    
     
     func softDelete(_ salesNoteId: UUID, shopId: UUID, on db: any Database) async throws {
         guard let _ = try await salesNoteRepository.findByIdAndShop(

@@ -1,0 +1,43 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/cashflows/:shopId"
+  method: GET
+  pathVariables:
+    shopId: 28F6C248-5D46-40C5-8FA3-323BFDF3F9CC
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "456"
+    connection: keep-alive
+    date: Sat, 29 Aug 2026 04:01:22 GMT
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "id": "44CAD8B2-3012-4109-B3E1-2E5FEF0A2DF4",
+          "occurredAt": "2026-08-27T00:00:00Z",
+          "title": "John Doe",
+          "description": "00001",
+          "type": "sales_note",
+          "amount": 100000
+        },
+        {
+          "id": "5AD5E392-39BA-485A-8BA8-38D2BA4133C4",
+          "occurredAt": "2026-08-27T00:00:00Z",
+          "title": "John Doe",
+          "description": "00002",
+          "type": "sales_note",
+          "amount": 100000
+        },
+        {
+          "id": "599F0D9E-76ED-48C9-B042-5527634B79E0",
+          "occurredAt": "2024-01-01T00:00:00Z",
+          "title": "Supplier Co.",
+          "type": "expense",
+          "amount": 50000
+        }
+      ]
+order: 1787977590730

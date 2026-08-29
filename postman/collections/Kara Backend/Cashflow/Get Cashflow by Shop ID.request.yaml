@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/cashflows/:shopId"
+method: GET
+pathVariables:
+  shopId: 28F6C248-5D46-40C5-8FA3-323BFDF3F9CC
+examples: .resources/Get Cashflow by Shop ID.resources/examples
+order: 1787975490339

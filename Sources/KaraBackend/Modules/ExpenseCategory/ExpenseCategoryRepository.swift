@@ -5,6 +5,7 @@ import SQLKit
 protocol ExpenseCategoryRepositoryProtocol: Sendable {
     func create(name: String, on db: any Database) async throws -> ExpenseCategory
     func findAll(on db: any Database) async throws -> [ExpenseCategory]
+    func findById(_ id: UUID, on db: any Database) async throws -> ExpenseCategory?
     func findByName(name: String, on db: any Database) async throws -> ExpenseCategory?
     func findByNameSlug(nameSlug: String, on db: any Database) async throws -> ExpenseCategory?
     func deleteById(_ id: UUID, on db: any Database) async throws
@@ -45,6 +46,20 @@ struct ExpenseCategoryRepository: ExpenseCategoryRepositoryProtocol, Sendable {
             """).all(decoding: ExpenseCategoryRow.self)
         
         return expenseCategories.map(\.expenseCategory)
+    }
+    
+    func findById(_ id: UUID, on db: any Database) async throws -> ExpenseCategory? {
+        guard let sql = db as? any SQLDatabase else {
+            throw Abort(.internalServerError, reason: "Database connection error")
+        }
+        
+        let expenseCategory = try await sql.raw("""
+            SELECT id, name, name_slug
+            FROM expense_categories
+            WHERE id = \(bind: id)
+        """).first(decoding: ExpenseCategoryRow.self)
+        
+        return expenseCategory?.expenseCategory
     }
     
     func findByName(name: String, on db: any Database) async throws -> ExpenseCategory? {

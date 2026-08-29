@@ -9,6 +9,7 @@ struct CashflowExpenseController: RouteCollection {
         
         cashflowExpenses.post(use: create)
         cashflowExpenses.get(":shopId", use: findAllByShop)
+        cashflowExpenses.get(":shopId", ":id", use: findByIdAndShop)
         cashflowExpenses.patch(":shopId", ":id", use: update)
         cashflowExpenses.delete(":shopId", ":id", use: delete)
     }
@@ -29,6 +30,22 @@ struct CashflowExpenseController: RouteCollection {
         
         return try await cashflowExpenseService.findAllByShop(
             shopId,
+            on: req.db
+        )
+    }
+    
+    func findByIdAndShop(req: Request) async throws -> CashflowExpenseResponseDTO {
+        guard let shopId = req.parameters.get("shopId", as: UUID.self) else {
+            throw Abort(.badRequest, reason: "Invalid shop ID")
+        }
+        
+        guard let id = req.parameters.get("id", as: UUID.self) else {
+            throw Abort(.badRequest, reason: "Invalid ID")
+        }
+        
+        return try await cashflowExpenseService.findByIdAndShop(
+            id,
+            shopId: shopId,
             on: req.db
         )
     }

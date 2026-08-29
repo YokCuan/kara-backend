@@ -23,13 +23,14 @@ struct CashflowExpenseService: CashflowExpenseServiceProtocol, Sendable {
         }
         
         return try await db.transaction { tx in
+            let purchasedAt = dto.purchasedAt ?? Date()
             let expense = try await expenseRepository.create(
                 shopId: dto.shopId,
                 expenseCategoryId: dto.expenseCategoryId,
                 supplierName: dto.supplierName,
                 supplierPhone: dto.supplierPhone,
                 paidAmount: dto.paidAmount,
-                purchasedAt: dto.purchasedAt,
+                purchasedAt: purchasedAt,
                 createdBy: dto.createdBy,
                 updatedBy: dto.updatedBy,
                 on: tx

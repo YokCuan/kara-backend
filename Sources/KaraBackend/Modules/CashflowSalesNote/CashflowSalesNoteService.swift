@@ -24,6 +24,8 @@ struct CashflowSalesNoteService: CashflowSalesNoteServiceProtocol, Sendable {
             total + (item.quantity * item.unitPrice)
         }
         
+        let dueAt = dto.dueAt ?? nil
+        
         return try await db.transaction { tx in
             let status = status(totalAmount: totalAmount, paidAmount: dto.paidAmount)
             
@@ -35,7 +37,7 @@ struct CashflowSalesNoteService: CashflowSalesNoteServiceProtocol, Sendable {
                 paidAmount: dto.paidAmount,
                 status: status,
                 noteFileLink: dto.noteFileLink,
-                dueAt: dto.dueAt,
+                dueAt: dueAt,
                 soldAt: dto.soldAt,
                 createdBy: dto.createdBy,
                 updatedBy: dto.updatedBy,

@@ -1,4 +1,5 @@
 $kind: http-request
+name: Create Expense
 url: "{{baseUrl}}/expenses"
 method: POST
 headers:
@@ -12,8 +13,7 @@ body:
       "supplierName": "Supplier Co.",
       "supplierPhone": "08012345678",
       "paidAmount": 50000,
-      "purchasedAt": "2024-01-01T00:00:00Z",
-      "createdBy": "admin",
-      "updatedBy": "admin"
+      "createdBy": "{{userId}}",
+      "updatedBy": "{{userId}}"
     }
 order: 1000

@@ -10,7 +10,7 @@ struct CreateCashflowExpenseDTO: Content {
     let supplierName: String?
     let supplierPhone: String?
     let paidAmount: Int
-    let purchasedAt: Date
+    let purchasedAt: Date?
     let createdBy: String
     let updatedBy: String
     let items: [CreateCashflowExpenseItemDTO]

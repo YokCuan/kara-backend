@@ -10,7 +10,7 @@ struct CashflowService: CashflowServiceProtocol, Sendable {
     let salesNoteRepository: any SalesNoteRepositoryProtocol
 
     func findAllByShop(_ shopId: UUID,on db: any Database) async throws -> [CashflowResponseDTO] {
-        async let expensesTask = expenseRepository.findAllByShop(
+        async let expensesTask = expenseRepository.findAllByShopWithCategory(
             shopId,
             on: db
         )
@@ -25,14 +25,11 @@ struct CashflowService: CashflowServiceProtocol, Sendable {
             salesNotesTask
         )
 
-        let expenseEntries = try expenses.map { expense in
-            guard let id = expense.id else {
-                throw Abort(.internalServerError, reason: "Expense ID is missing")
-            }
-
+        let expenseEntries = expenses.map { expense in
             return CashflowResponseDTO(
-                id: id,
+                id: expense.id,
                 type: .expense,
+                categoryType: expense.categoryName,
                 amount: expense.paidAmount,
                 occurredAt: expense.purchasedAt,
                 title: expense.supplierName ?? "Expense",
@@ -48,6 +45,7 @@ struct CashflowService: CashflowServiceProtocol, Sendable {
             return CashflowResponseDTO(
                 id: id,
                 type: .salesNote,
+                categoryType: "Penjualan",
                 amount: salesNote.paidAmount,
                 occurredAt: salesNote.soldAt,
                 title: salesNote.customerName,

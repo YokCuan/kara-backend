@@ -19,7 +19,7 @@ struct CreateSalesNote: AsyncMigration {
             .field("status", status, .required)
             .field("note_file_link", .string)
             .field("due_at", .datetime)
-            .field("sold_at", .datetime)
+            .field("sold_at", .datetime, .required)
             .field("created_at", .datetime, .required)
             .field("updated_at", .datetime, .required)
             .field("created_by", .string, .required)

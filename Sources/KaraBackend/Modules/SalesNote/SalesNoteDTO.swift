@@ -9,8 +9,13 @@ struct CreateSalesNoteDTO: Content {
     let paidAmount: Int
     let noteFileLink: String?
     let dueAt: Date?
-    let soldAt: Date
+    let soldAt: Date?
     let createdBy: String
+    let updatedBy: String
+}
+
+struct AddSalesNotePaymentDTO: Content {
+    let paidAmount: Int
     let updatedBy: String
 }
 
@@ -25,7 +30,7 @@ struct SalesNoteResponseDTO: Content {
     let status: Status
     let noteFileLink: String?
     let dueAt: Date?
-    let soldAt: Date?
+    let soldAt: Date
     let createdAt: Date?
     let updatedAt: Date?
     let createdBy: String

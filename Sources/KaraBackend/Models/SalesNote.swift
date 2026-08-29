@@ -41,8 +41,8 @@ final class SalesNote: Model, @unchecked Sendable {
     @OptionalField(key: "due_at")
     var dueAt: Date?
     
-    @OptionalField(key: "sold_at")
-    var soldAt: Date?
+    @Field(key: "sold_at")
+    var soldAt: Date
     
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
@@ -66,7 +66,7 @@ final class SalesNote: Model, @unchecked Sendable {
         
     }
     
-    init(id: UUID? = nil, shopId: UUID, identifier: String, customerName: String, customerPhone: String?, totalAmount: Int, paidAmount: Int, status: Status, noteFileLink: String?, dueAt: Date?, soldAt: Date?, createdAt: Date?, updatedAt: Date?, createdBy: String, updatedBy: String, isDeleted: Bool = false) {
+    init(id: UUID? = nil, shopId: UUID, identifier: String, customerName: String, customerPhone: String?, totalAmount: Int, paidAmount: Int, status: Status, noteFileLink: String?, dueAt: Date?, soldAt: Date, createdAt: Date?, updatedAt: Date?, createdBy: String, updatedBy: String, isDeleted: Bool = false) {
         self.id = id
         self.$shop.id = shopId
         self.identifier = identifier

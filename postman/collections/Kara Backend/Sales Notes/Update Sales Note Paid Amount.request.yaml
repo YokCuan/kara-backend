@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{baseUrl}}/sales_notes/paid-amount/:shopId/:id"
+method: PATCH
+headers:
+  Content-Type: application/json
+pathVariables:
+  shopId: 28F6C248-5D46-40C5-8FA3-323BFDF3F9CC
+  id: 5AD5E392-39BA-485A-8BA8-38D2BA4133C4
+body:
+  type: json
+  content: |-
+    {
+      "paidAmount": 20000,
+      "updatedBy": "{{userId}}"
+    }
+examples: .resources/Update Sales Note Paid Amount.resources/examples
+order: 1446

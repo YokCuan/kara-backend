@@ -1,0 +1,9 @@
+$kind: http-request
+url: "{{baseUrl}}/cashflow_sales_notes/:shopId"
+method: GET
+headers:
+  Content-Type: application/json
+pathVariables:
+  shopId: 28F6C248-5D46-40C5-8FA3-323BFDF3F9CC
+examples: .resources/Get Cashflow Sales Notes by Shop ID.resources/examples
+order: 3791331470082363

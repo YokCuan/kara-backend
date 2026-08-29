@@ -2,7 +2,8 @@ import Fluent
 import Vapor
 
 protocol SalesNoteServiceProtocol: Sendable {
-    func create(_ dto: CreateSalesNoteDTO, on db: any Database) async throws -> SalesNoteResponseDTO
+    func create(_ data: CreateSalesNoteDTO, on db: any Database) async throws -> SalesNoteResponseDTO
+    func addSalesNotePaidAmount(_ id: UUID, shopId: UUID, data: AddSalesNotePaymentDTO, on db: any Database) async throws -> SalesNoteResponseDTO
     func findAllByShop(_ shopId: UUID, on db: any Database) async throws -> [SalesNoteResponseDTO]
     func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> SalesNoteResponseDTO?
     func findByShopAndIdentifier(_ shopId: UUID, identifier: String, on db: any Database) async throws -> SalesNoteResponseDTO?
@@ -14,7 +15,7 @@ struct SalesNoteService: SalesNoteServiceProtocol, Sendable {
     
     func create(_ data: CreateSalesNoteDTO, on db: any Database) async throws -> SalesNoteResponseDTO {
         try await db.transaction { tx in
-            let status = status(totalAmount: data.totalAmount, paidAmount: data.paidAmount)
+            let status = paymentStatus(totalAmount: data.totalAmount, paidAmount: data.paidAmount)
             
             let salesNote = try await salesNoteRepository.create(
                 shopId: data.shopId,
@@ -25,8 +26,36 @@ struct SalesNoteService: SalesNoteServiceProtocol, Sendable {
                 status: status,
                 noteFileLink: data.noteFileLink,
                 dueAt: data.dueAt,
-                soldAt: data.soldAt,
+                soldAt: data.soldAt ?? Date(),
                 createdBy: data.createdBy,
+                updatedBy: data.updatedBy,
+                on: tx
+            )
+            
+            return try SalesNoteResponseDTO(salesNote: salesNote)
+        }
+    }
+    
+    func addSalesNotePaidAmount(_ id: UUID, shopId: UUID, data: AddSalesNotePaymentDTO, on db: any Database) async throws -> SalesNoteResponseDTO {
+        try await db.transaction { tx in
+            guard let existingSalesNote = try await salesNoteRepository.findByIdAndShop(id, shopId: shopId, on: tx) else {
+                throw Abort(.notFound, reason: "Sales note not found")
+            }
+            guard data.paidAmount >= 0 else {
+                throw Abort(.badRequest, reason: "Paid amount cannot be negative")
+            }
+
+            guard data.paidAmount <= existingSalesNote.totalAmount else {
+                throw Abort(.badRequest, reason: "Paid amount cannot exceed total amount")
+            }
+            let newPaidAmount = existingSalesNote.paidAmount + data.paidAmount
+            let status = paymentStatus(totalAmount: existingSalesNote.totalAmount, paidAmount: newPaidAmount)
+            
+            let salesNote = try await salesNoteRepository.updatePaidAmount(
+                id,
+                shopId: shopId,
+                paidAmount: newPaidAmount,
+                status: status,
                 updatedBy: data.updatedBy,
                 on: tx
             )
@@ -60,7 +89,7 @@ struct SalesNoteService: SalesNoteServiceProtocol, Sendable {
         return try await salesNoteRepository.softDeleteByIdAndShop(id, shopId: shopId, on: db)
     }
     
-    private func status(totalAmount: Int, paidAmount: Int) -> Status {
+    private func paymentStatus(totalAmount: Int, paidAmount: Int) -> Status {
         if paidAmount == totalAmount {
             return .paid
         } else if paidAmount == 0 {

@@ -8,6 +8,7 @@ struct CashflowSalesNoteController: RouteCollection {
         let cashflowSalesNotes = routes.grouped("cashflow_sales_notes")
         
         cashflowSalesNotes.post(use: create)
+        cashflowSalesNotes.get(":shopId", use: findAllByShop)
         cashflowSalesNotes.delete(":shopId", ":id", use: softDelete)
     }
     
@@ -16,6 +17,17 @@ struct CashflowSalesNoteController: RouteCollection {
         
         return try await cashflowSalesNoteService.create(
             dto,
+            on: req.db
+        )
+    }
+    
+    func findAllByShop(req: Request) async throws -> [CashflowSalesNoteResponseDTO] {
+        guard let shopId = req.parameters.get("shopId", as: UUID.self) else {
+            throw Abort(.badRequest, reason: "Invalid shop ID")
+        }
+        
+        return try await cashflowSalesNoteService.findAllByShop(
+            shopId,
             on: req.db
         )
     }

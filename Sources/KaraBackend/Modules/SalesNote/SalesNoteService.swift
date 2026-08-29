@@ -16,7 +16,7 @@ struct SalesNoteService: SalesNoteServiceProtocol, Sendable {
     func create(_ data: CreateSalesNoteDTO, on db: any Database) async throws -> SalesNoteResponseDTO {
         try await db.transaction { tx in
             let status = paymentStatus(totalAmount: data.totalAmount, paidAmount: data.paidAmount)
-            
+            let dueAt = data.dueAt ?? nil
             let salesNote = try await salesNoteRepository.create(
                 shopId: data.shopId,
                 customerName: data.customerName,
@@ -25,7 +25,7 @@ struct SalesNoteService: SalesNoteServiceProtocol, Sendable {
                 paidAmount: data.paidAmount,
                 status: status,
                 noteFileLink: data.noteFileLink,
-                dueAt: data.dueAt,
+                dueAt: dueAt,
                 soldAt: data.soldAt ?? Date(),
                 createdBy: data.createdBy,
                 updatedBy: data.updatedBy,

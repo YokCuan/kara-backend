@@ -12,13 +12,14 @@ struct ExpenseService: ExpenseServiceProtocol, Sendable {
     let expenseRepository: any ExpenseRepositoryProtocol
     
     func create(_ data: CreateExpenseDTO, on db: any Database) async throws -> ExpenseResponseDTO {
+        let purchasedAt = data.purchasedAt ?? Date()
         let expense = try await expenseRepository.create(
             shopId: data.shopId,
             expenseCategoryId: data.expenseCategoryId,
             supplierName: data.supplierName,
             supplierPhone: data.supplierPhone,
             paidAmount: data.paidAmount,
-            purchasedAt: data.purchasedAt,
+            purchasedAt: purchasedAt,
             createdBy: data.createdBy,
             updatedBy: data.updatedBy,
             on: db

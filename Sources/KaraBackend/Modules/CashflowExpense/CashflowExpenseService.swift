@@ -5,6 +5,7 @@ import Vapor
 protocol CashflowExpenseServiceProtocol: Sendable {
     func create(_ dto: CreateCashflowExpenseDTO, on db: any Database) async throws -> CashflowExpenseResponseDTO
     func findAllByShop(_ shopId: UUID, on db: any Database) async throws -> [CashflowExpenseResponseDTO]
+    func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> CashflowExpenseResponseDTO
     func update(_ expenseId: UUID, shopId: UUID, dto: UpdateCashflowExpenseDTO, on db: any Database) async throws -> CashflowExpenseResponseDTO
     func delete(_ expenseId: UUID, shopId: UUID, on db: any Database ) async throws
 }
@@ -81,6 +82,27 @@ struct CashflowExpenseService: CashflowExpenseServiceProtocol, Sendable {
         }
         
         return results
+    }
+    
+    func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> CashflowExpenseResponseDTO {
+        guard let expense = try await expenseRepository.findByIdAndShop(id, shopId: shopId, on: db) else {
+            throw Abort(.notFound, reason: "Expense not found")
+        }
+        
+        guard let expenseId = expense.id else {
+            throw Abort(.internalServerError, reason: "Expense ID is missing")
+        }
+        
+        let expenseItems = try await expenseItemRepository.findAllByExpense(expenseId, on: db)
+        
+        let expenseItemDTOs = try expenseItems.map {
+            try ExpenseItemResponseDTO(expenseItem: $0)
+        }
+        
+        return CashflowExpenseResponseDTO(
+            expense: try ExpenseResponseDTO(expense: expense),
+            expenseItems: expenseItemDTOs
+        )
     }
     
     func update(_ expenseId: UUID, shopId: UUID, dto: UpdateCashflowExpenseDTO, on db: any Database) async throws -> CashflowExpenseResponseDTO {

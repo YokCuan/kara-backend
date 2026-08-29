@@ -5,6 +5,7 @@ import SQLKit
 protocol ExpenseRepositoryProtocol: Sendable {
     func create(shopId: UUID, expenseCategoryId: UUID, supplierName: String?, supplierPhone: String?, paidAmount: Int, purchasedAt: Date, createdBy: String, updatedBy: String, on db: any Database) async throws -> Expense
     func findAllByShop(_ shopId: UUID, on db: any Database) async throws -> [Expense]
+    func findAllByShopWithCategory(_ shopId: UUID, on db: any Database) async throws -> [CashflowExpenseRow]
     func findAllByShopAndCategory(_ shopId: UUID, expenseCategoryId: UUID, on db: any Database) async throws -> [Expense]
     func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> Expense?
     func update(_ id: UUID, shopId: UUID, expenseCategoryId: UUID, supplierName: String?, supplierPhone: String?, paidAmount: Int, purchasedAt: Date, updatedBy: String, on db: any Database) async throws -> Expense
@@ -41,8 +42,9 @@ struct ExpenseRepository: ExpenseRepositoryProtocol, Sendable {
         
         let allExpenses = try await sql.raw("""
             SELECT
-                id, shop_id, expense_category_id, supplier_name, supplier_phone, paid_amount, purchased_at, created_at, updated_at, created_by, updated_by
-            FROM expenses
+                e.id, e.shop_id, e.expense_category_id, e.supplier_name, e.supplier_phone, e.paid_amount, e.purchased_at, e.created_at, e.updated_at, e.created_by, e.updated_by, ec.name AS category_name, ec.name_slug AS category_name_slug
+            FROM expenses e
+            JOIN expense_categories ec ON e.expense_category_id = ec.id
             WHERE shop_id = \(bind: shopId)
             """).all(decoding: ExpenseRow.self)
         
@@ -56,12 +58,26 @@ struct ExpenseRepository: ExpenseRepositoryProtocol, Sendable {
         
         let allExpenses = try await sql.raw("""
             SELECT
-                id, shop_id, expense_category_id, supplier_name, supplier_phone, paid_amount, purchased_at, created_at, updated_at, created_by, updated_by
-            FROM expenses
+                id, shop_id, expense_category_id, supplier_name, supplier_phone, paid_amount, purchased_at, created_at, updated_at, created_by, updated_by, 
+            FROM expenses 
             WHERE shop_id = \(bind: shopId) AND expense_category_id = \(bind: expenseCategoryId)
             """).all(decoding: ExpenseRow.self)
         
         return allExpenses.map(\.expense)
+    }
+    
+    func findAllByShopWithCategory(_ shopId: UUID, on db: any Database) async throws -> [CashflowExpenseRow] {
+        guard let sql = db as? any SQLDatabase else {
+            throw Abort(.internalServerError, reason: "Database connection error")
+        }
+        
+        return try await sql.raw("""
+            SELECT
+                e.id, e.shop_id, e.expense_category_id, e.supplier_name, e.supplier_phone, e.paid_amount, e.purchased_at, e.created_at, e.updated_at, e.created_by, e.updated_by, ec.name AS category_name, ec.name_slug AS category_name_slug
+            FROM expenses e
+            JOIN expense_categories ec ON e.expense_category_id = ec.id
+            WHERE e.shop_id = \(bind: shopId)
+            """).all(decoding: CashflowExpenseRow.self)
     }
     
     func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> Expense? {
@@ -71,9 +87,10 @@ struct ExpenseRepository: ExpenseRepositoryProtocol, Sendable {
         
         let expense = try await sql.raw("""
             SELECT
-                id, shop_id, expense_category_id, supplier_name, supplier_phone, paid_amount, purchased_at, created_at, updated_at, created_by, updated_by
-            FROM expenses
-            WHERE id = \(bind: id) AND shop_id = \(bind: shopId)
+                e.id, e.shop_id, e.expense_category_id, e.supplier_name, e.supplier_phone, e.paid_amount, e.purchased_at, e.created_at, e.updated_at, e.created_by, e.updated_by, ec.name, ec.name_slug
+            FROM expenses e
+            JOIN expense_categories ec ON e.expense_category_id = ec.id
+            WHERE e.id = \(bind: id) AND e.shop_id = \(bind: shopId)
             """).first(decoding: ExpenseRow.self)
         
         return expense?.expense

@@ -9,6 +9,7 @@ struct CashflowSalesNoteController: RouteCollection {
         
         cashflowSalesNotes.post(use: create)
         cashflowSalesNotes.get(":shopId", use: findAllByShop)
+        cashflowSalesNotes.get(":shopId", ":id", use: findByIdAndShop)
         cashflowSalesNotes.delete(":shopId", ":id", use: softDelete)
     }
     
@@ -28,6 +29,22 @@ struct CashflowSalesNoteController: RouteCollection {
         
         return try await cashflowSalesNoteService.findAllByShop(
             shopId,
+            on: req.db
+        )
+    }
+    
+    func findByIdAndShop(req: Request) async throws -> CashflowSalesNoteResponseDTO {
+        guard let shopId = req.parameters.get("shopId", as: UUID.self) else {
+            throw Abort(.badRequest, reason: "Invalid shop ID")
+        }
+        
+        guard let id = req.parameters.get("id", as: UUID.self) else {
+            throw Abort(.badRequest, reason: "Invalid ID")
+        }
+        
+        return try await cashflowSalesNoteService.findByIdAndShop(
+            id,
+            shopId: shopId,
             on: req.db
         )
     }

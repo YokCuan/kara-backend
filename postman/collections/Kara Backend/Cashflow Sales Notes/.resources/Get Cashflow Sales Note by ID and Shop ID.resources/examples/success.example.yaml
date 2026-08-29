@@ -1,0 +1,58 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/cashflow_sales_notes/:shopId/:id"
+  method: GET
+  headers:
+    Content-Type: application/json
+  pathVariables:
+    shopId: 28F6C248-5D46-40C5-8FA3-323BFDF3F9CC
+    id: 44CAD8B2-3012-4109-B3E1-2E5FEF0A2DF4
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "848"
+    connection: keep-alive
+    date: Sat, 29 Aug 2026 10:55:14 GMT
+  body:
+    type: json
+    content: |-
+      {
+        "salesNote": {
+          "isDeleted": false,
+          "totalAmount": 120000,
+          "createdAt": "2026-08-27T02:56:42Z",
+          "customerPhone": "+1234567890",
+          "updatedBy": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+          "shopId": "28F6C248-5D46-40C5-8FA3-323BFDF3F9CC",
+          "soldAt": "2026-08-27T00:00:00Z",
+          "id": "44CAD8B2-3012-4109-B3E1-2E5FEF0A2DF4",
+          "dueAt": "2026-09-30T00:00:00Z",
+          "paidAmount": 100000,
+          "identifier": "00001",
+          "customerName": "John Doe",
+          "status": "dp_paid",
+          "createdBy": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+          "updatedAt": "2026-08-27T02:56:42Z"
+        },
+        "salesNoteItems": [
+          {
+            "quantity": 2,
+            "unitPrice": 40000,
+            "id": "38E4960E-1E66-49D9-A617-02C200A7EDF1",
+            "subtotal": 80000,
+            "salesNoteId": "44CAD8B2-3012-4109-B3E1-2E5FEF0A2DF4",
+            "name": "Product A"
+          },
+          {
+            "quantity": 1,
+            "unitPrice": 40000,
+            "id": "7DC93D6D-10DF-444A-B79C-E847A831592B",
+            "subtotal": 40000,
+            "salesNoteId": "44CAD8B2-3012-4109-B3E1-2E5FEF0A2DF4",
+            "name": "Product B"
+          }
+        ]
+      }
+order: 1788000915882

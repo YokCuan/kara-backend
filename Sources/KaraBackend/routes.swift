@@ -70,4 +70,7 @@ func routes(_ app: Application) throws {
     
     let cashflowController = CashflowController(cashflowService: cashflowService)
     try app.register(collection: cashflowController)
+    
+    //    MARK: - Upload Image
+    try app.register(collection: UploadImageController())
 }

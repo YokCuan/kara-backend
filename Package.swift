@@ -15,7 +15,8 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent.git", from: "4.11.0"),
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.9.0"),
         .package(url: "https://github.com/vapor/queues.git", from: "1.0.0"),
-        .package(url: "https://github.com/m-barthelemy/vapor-queues-fluent-driver.git", from: "3.0.0-beta1")
+        .package(url: "https://github.com/m-barthelemy/vapor-queues-fluent-driver.git", from: "3.0.0-beta1"),
+        .package(url: "https://github.com/soto-project/soto.git",from: "7.0.0")
     ],
     targets: [
         .executableTarget(
@@ -28,7 +29,8 @@ let package = Package(
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
                 .product(name: "Queues", package: "queues"),
-                .product(name: "QueuesFluentDriver", package: "vapor-queues-fluent-driver")
+                .product(name: "QueuesFluentDriver", package: "vapor-queues-fluent-driver"),
+                .product(name: "SotoS3", package: "soto")
             ],
             swiftSettings: swiftSettings
         ),

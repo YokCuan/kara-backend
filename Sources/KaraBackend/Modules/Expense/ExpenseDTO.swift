@@ -53,3 +53,24 @@ struct ExpenseByIdAndShopDTO: Content {
 //    let id: UUID --- get from req.query instead
     let shopId: UUID
 }
+
+struct SupplierRow: Decodable {
+    let supplierName: String
+    let supplierPhone: String?
+    let expenseCount: Int
+    let lastPurchasedAt: Date
+
+    enum CodingKeys: String, CodingKey {
+        case supplierName = "supplier_name"
+        case supplierPhone = "supplier_phone"
+        case expenseCount = "expense_count"
+        case lastPurchasedAt = "last_purchased_at"
+    }
+}
+
+struct SupplierResponseDTO: Content {
+    let supplierName: String
+    let supplierPhone: String?
+    let expenseCount: Int
+    let lastPurchasedAt: Date
+}

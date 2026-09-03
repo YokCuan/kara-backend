@@ -3,6 +3,7 @@ import Vapor
 
 protocol CashflowSalesNoteServiceProtocol: Sendable {
     func create(_ dto: CreateCashflowSalesNoteDTO, on db: any Database) async throws -> CashflowSalesNoteResponseDTO
+    func updatePaidAmountAndStatus(_ id: UUID, shopId: UUID, dto: UpdateCashflowSalesNotePaidAmountAndStatusDTO, on db: any Database) async throws -> CashflowSalesNotePaymentsResponseDTO
     func findAllByShop(_ shopId: UUID, on db: any Database) async throws -> [CashflowSalesNoteResponseDTO]
     func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> CashflowSalesNoteResponseDTO
     func softDelete(_ salesNoteId: UUID, shopId: UUID, on db: any Database) async throws
@@ -11,6 +12,7 @@ protocol CashflowSalesNoteServiceProtocol: Sendable {
 struct CashflowSalesNoteService: CashflowSalesNoteServiceProtocol, Sendable {
     let salesNoteRepository: any SalesNoteRepositoryProtocol
     let salesNoteItemRepository: any SalesNoteItemRepositoryProtocol
+    let salesNotePaymentRepository: any SalesNotePaymentRepositoryProtocol
     
     func create(_ dto: CreateCashflowSalesNoteDTO, on db: any Database) async throws -> CashflowSalesNoteResponseDTO {
         guard !dto.items.isEmpty else {
@@ -48,6 +50,21 @@ struct CashflowSalesNoteService: CashflowSalesNoteServiceProtocol, Sendable {
                 throw Abort(.internalServerError, reason: "Failed to create sales note")
             }
             
+            var salesNotePayments: [SalesNotePaymentResponseDTO] = []
+            
+            if dto.paidAmount > 0 {
+                let payment = try await salesNotePaymentRepository.create(
+                    salesNoteId: salesNoteId,
+                    paymentAttempt: 1,
+                    paidAmount: dto.paidAmount,
+                    paidAt: dto.soldAt,
+                    on: tx
+                )
+                
+                salesNotePayments.append(
+                    try SalesNotePaymentResponseDTO(salesNotePayment: payment)
+                )
+            }
             var salesNoteItems: [SalesNoteItemResponseDTO] = []
             
             for item in dto.items {
@@ -63,7 +80,64 @@ struct CashflowSalesNoteService: CashflowSalesNoteServiceProtocol, Sendable {
             
             return CashflowSalesNoteResponseDTO(
                 salesNote: try SalesNoteResponseDTO(salesNote: salesNote),
-                salesNoteItems: salesNoteItems
+                salesNoteItems: salesNoteItems,
+                salesNotePayments: salesNotePayments
+            )
+        }
+    }
+    
+    func updatePaidAmountAndStatus(_ id: UUID, shopId: UUID, dto: UpdateCashflowSalesNotePaidAmountAndStatusDTO, on db: any Database) async throws -> CashflowSalesNotePaymentsResponseDTO {
+        try await db.transaction { tx in
+            guard let salesNote = try await salesNoteRepository.findByIdAndShop(
+                id,
+                shopId: shopId,
+                on: tx
+            ) else {
+                throw Abort(.notFound, reason: "Sales Note ID not found")
+            }
+            
+            guard dto.paidAmount > 0 else {
+                throw Abort(.badRequest, reason: "Payment amount must be greater than zero")
+            }
+            
+            let newPaidAmount = salesNote.paidAmount + dto.paidAmount
+            
+            guard newPaidAmount <= salesNote.totalAmount else {
+                throw Abort(.badRequest, reason: "Payment exceeds the remaining balance")
+            }
+            
+            let existingPayments = try await salesNotePaymentRepository.findAllBySalesNote(id, on: tx)
+            
+            let paymentAttempt = existingPayments.count + 1
+            
+            let payment = try await salesNotePaymentRepository.create(
+                salesNoteId: id,
+                paymentAttempt: paymentAttempt,
+                paidAmount: dto.paidAmount,
+                paidAt: dto.paidAt,
+                on: tx
+            )
+            
+            let newStatus = paymentStatus(totalAmount: salesNote.totalAmount,paidAmount: newPaidAmount)
+            
+            let updatedSalesNote = try await salesNoteRepository.updatePaidAmount(
+                id,
+                shopId: shopId,
+                paidAmount: newPaidAmount,
+                status: newStatus,
+                updatedBy: salesNote.createdBy,
+                on: tx
+            )
+            
+            let allPayments = try await salesNotePaymentRepository.findAllBySalesNote(id, on: tx)
+            
+            let paymentDTOs = try allPayments.map {
+                try SalesNotePaymentResponseDTO(salesNotePayment: $0)
+            }
+            
+            return CashflowSalesNotePaymentsResponseDTO(
+                salesNote: try SalesNoteResponseDTO(salesNote: updatedSalesNote),
+                salesNotePayments: paymentDTOs
             )
         }
     }
@@ -84,10 +158,17 @@ struct CashflowSalesNoteService: CashflowSalesNoteServiceProtocol, Sendable {
                 try SalesNoteItemResponseDTO(salesNoteItem: $0)
             }
             
+            let salesNotePayments = try await salesNotePaymentRepository.findAllBySalesNote(salesNoteId, on: db)
+            
+            let salesNotePaymentDTOs = try salesNotePayments.map {
+                try SalesNotePaymentResponseDTO(salesNotePayment: $0)
+            }
+            
             results.append(
                 CashflowSalesNoteResponseDTO(
                     salesNote: try SalesNoteResponseDTO(salesNote: salesNote),
-                    salesNoteItems: salesNoteItemDTOs
+                    salesNoteItems: salesNoteItemDTOs,
+                    salesNotePayments: salesNotePaymentDTOs
                 )
             )
         }
@@ -110,9 +191,15 @@ struct CashflowSalesNoteService: CashflowSalesNoteServiceProtocol, Sendable {
             try SalesNoteItemResponseDTO(salesNoteItem: $0)
         }
         
+        let salesNotePayments = try await salesNotePaymentRepository.findAllBySalesNote(salesNoteId, on: db)
+        
+        let salesNotePaymentDTOs = try salesNotePayments.map {
+            try SalesNotePaymentResponseDTO(salesNotePayment: $0)
+        }
         return CashflowSalesNoteResponseDTO(
             salesNote: try SalesNoteResponseDTO(salesNote: salesNote),
-            salesNoteItems: salesNoteItemDTOs
+            salesNoteItems: salesNoteItemDTOs,
+            salesNotePayments: salesNotePaymentDTOs
         )
     }
     

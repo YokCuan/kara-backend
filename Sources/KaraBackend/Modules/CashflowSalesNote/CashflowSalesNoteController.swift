@@ -8,6 +8,7 @@ struct CashflowSalesNoteController: RouteCollection {
         let cashflowSalesNotes = routes.grouped("cashflow_sales_notes")
         
         cashflowSalesNotes.post(use: create)
+        cashflowSalesNotes.patch(":shopId", ":id", use: updatePaidAmountAndStatus)
         cashflowSalesNotes.get(":shopId", use: findAllByShop)
         cashflowSalesNotes.get(":shopId", ":id", use: findByIdAndShop)
         cashflowSalesNotes.delete(":shopId", ":id", use: softDelete)
@@ -18,6 +19,22 @@ struct CashflowSalesNoteController: RouteCollection {
         
         return try await cashflowSalesNoteService.create(
             dto,
+            on: req.db
+        )
+    }
+    
+    func updatePaidAmountAndStatus(req: Request) async throws -> CashflowSalesNotePaymentsResponseDTO {
+        guard let shopId = req.parameters.get("shopId", as: UUID.self) else {
+            throw Abort(.badRequest, reason: "Invalid shop ID")
+        }
+        guard let id = req.parameters.get("id", as: UUID.self) else {
+            throw Abort(.badRequest, reason: "Invalid Sales Note ID")
+        }
+        let dto = try req.content.decode(UpdateCashflowSalesNotePaidAmountAndStatusDTO.self)
+        
+        return try await cashflowSalesNoteService.updatePaidAmountAndStatus(id,
+            shopId: shopId,
+            dto: dto,
             on: req.db
         )
     }

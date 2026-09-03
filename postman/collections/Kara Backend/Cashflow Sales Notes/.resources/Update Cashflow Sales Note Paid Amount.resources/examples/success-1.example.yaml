@@ -1,0 +1,70 @@
+$kind: http-example
+name: success
+request:
+  url: "{{baseUrl}}/cashflow_sales_notes/:shopId/:id"
+  method: PATCH
+  headers:
+    Content-Type: application/json
+  pathVariables:
+    shopId: 333d57d5-871a-4743-aa49-46ae0382989a
+    id: 4E6FA395-A11E-4386-81BC-4CE085AED0E7
+  body:
+    type: json
+    content: |-
+      {
+        "paidAmount": 10000,
+        "paidAt": "2026-09-03T17:50:26Z"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "993"
+    connection: keep-alive
+    date: Thu, 03 Sep 2026 13:31:02 GMT
+  body:
+    type: json
+    content: |-
+      {
+        "salesNotePayments": [
+          {
+            "paymentAttempt": 1,
+            "salesNoteId": "4E6FA395-A11E-4386-81BC-4CE085AED0E7",
+            "paidAmount": 100000,
+            "id": "73FDB853-7404-4073-8DA0-168371D677E5",
+            "paidAt": "2026-09-01T00:00:00Z"
+          },
+          {
+            "paymentAttempt": 2,
+            "salesNoteId": "4E6FA395-A11E-4386-81BC-4CE085AED0E7",
+            "paidAmount": 10000,
+            "id": "39EA0D47-C5FD-49DC-B854-25224B0B5426",
+            "paidAt": "2026-09-03T00:00:00Z"
+          },
+          {
+            "paymentAttempt": 3,
+            "salesNoteId": "4E6FA395-A11E-4386-81BC-4CE085AED0E7",
+            "paidAmount": 10000,
+            "id": "7447FB0D-7B9B-41A8-95AE-3A0A56D474DD",
+            "paidAt": "2026-09-03T00:00:00Z"
+          }
+        ],
+        "salesNote": {
+          "createdBy": "D8E82A1A-615C-4FE3-8AB0-DF7A2B24A417",
+          "totalAmount": 120000,
+          "isDeleted": false,
+          "id": "4E6FA395-A11E-4386-81BC-4CE085AED0E7",
+          "identifier": "00006",
+          "updatedBy": "D8E82A1A-615C-4FE3-8AB0-DF7A2B24A417",
+          "updatedAt": "2026-09-03T13:31:00Z",
+          "status": "paid",
+          "createdAt": "2026-09-03T12:54:26Z",
+          "soldAt": "2026-09-01T15:12:55Z",
+          "shopId": "333D57D5-871A-4743-AA49-46AE0382989A",
+          "customerPhone": "+1234567890",
+          "paidAmount": 120000,
+          "customerName": "John Doe"
+        }
+      }
+order: 807002852508284

@@ -10,7 +10,7 @@ body:
     {
       "shopId": "{{shopId}}",
       "expenseCategoryId": "{{expenseCategoryId}}",
-      "supplierName": "Supplier Co.",
+      "supplierName": "Supplier Ltd.",
       "supplierPhone": "08012345678",
       "paidAmount": 50000,
       "createdBy": "{{userId}}",

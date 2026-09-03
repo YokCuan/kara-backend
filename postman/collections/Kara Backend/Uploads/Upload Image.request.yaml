@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{baseUrl}}/uploads"
+method: POST
+headers:
+  - key: Content-Type
+    value: application/json
+    disabled: true
+body:
+  type: formdata
+  content:
+    - type: file
+      key: file
+      src:
+        - /private/var/folders/4s/t4f640_14kgcvhv40mtrsx3m0000gn/T/TemporaryItems/com.apple.Photos.NSItemProvider/uuid=D4132868-F6B2-40C3-ACFB-99F7146D1CA1&code=001&library=1&type=1&mode=2&loc=true&cap=true.jpeg/IMG_0898.jpeg
+      description: ""
+      disabled: false
+order: 461270290665849

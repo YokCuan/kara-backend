@@ -86,10 +86,7 @@ struct SalesNoteService: SalesNoteServiceProtocol, Sendable {
         return try SalesNoteResponseDTO(salesNote: salesNote)
     }
     
-    func findAllCustomersByShop(
-        _ shopId: UUID,
-        on db: any Database
-    ) async throws -> [CustomerResponseDTO] {
+    func findAllCustomersByShop(_ shopId: UUID, on db: any Database) async throws -> [CustomerResponseDTO] {
         let customers = try await salesNoteRepository.findAllCustomersByShop(
             shopId,
             on: db

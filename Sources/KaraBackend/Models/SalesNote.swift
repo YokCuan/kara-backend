@@ -62,6 +62,9 @@ final class SalesNote: Model, @unchecked Sendable {
     @Children(for: \.$salesNote)
     var salesNoteItem: [SalesNoteItem]
     
+    @Children(for: \.$salesNote)
+    var salesNotePayment: [SalesNotePayment]
+    
     init() {
         
     }

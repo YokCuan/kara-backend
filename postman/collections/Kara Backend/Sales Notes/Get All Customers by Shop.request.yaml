@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/sales_notes/customers/:shopId"
+method: GET
+pathVariables:
+  shopId: 333d57d5-871a-4743-aa49-46ae0382989a
+examples: .resources/Get All Customers by Shop.resources/examples
+order: 2782

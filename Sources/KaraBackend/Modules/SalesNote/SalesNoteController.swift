@@ -9,6 +9,7 @@ struct SalesNoteController: RouteCollection {
         
         salesNotes.post(use: create)
         salesNotes.get(":shopId", use: findAllByShop)
+        salesNotes.get("customers", ":shopId", use: findAllCustomersByShop)
         salesNotes.get(":shopId", ":id", use: findByIdAndShop)
         salesNotes.get(":shopId", "identifier", ":identifier", use: findByShopAndIdentifier)
         salesNotes.patch("paid-amount", ":shopId", ":id", use: updateSalesNotePaidAmount)
@@ -92,6 +93,17 @@ struct SalesNoteController: RouteCollection {
         }
         
         return salesNote
+    }
+    
+    func findAllCustomersByShop(req: Request) async throws -> [CustomerResponseDTO] {
+        guard let shopId = req.parameters.get("shopId", as: UUID.self) else {
+            throw Abort(.badRequest, reason: "Invalid shop ID")
+        }
+        
+        return try await salesNoteService.findAllCustomersByShop(
+            shopId,
+            on: req.db
+        )
     }
     
     func softDeleteByIdAndShop(req: Request) async throws -> HTTPStatus {

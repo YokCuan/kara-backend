@@ -1,0 +1,32 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/expenses/suppliers/:shopId"
+  method: GET
+  pathVariables:
+    shopId: 333d57d5-871a-4743-aa49-46ae0382989a
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "242"
+    connection: keep-alive
+    date: Thu, 03 Sep 2026 06:34:56 GMT
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "lastPurchasedAt": "2026-09-03T06:34:41Z",
+          "supplierPhone": "08012345678",
+          "supplierName": "Supplier Co.",
+          "expenseCount": 3
+        },
+        {
+          "lastPurchasedAt": "2026-09-03T06:34:50Z",
+          "supplierPhone": "08012345678",
+          "supplierName": "Supplier Ltd.",
+          "expenseCount": 1
+        }
+      ]
+order: 1788417298568

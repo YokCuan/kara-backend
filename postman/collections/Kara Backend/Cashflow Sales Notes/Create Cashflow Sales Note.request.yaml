@@ -1,5 +1,4 @@
 $kind: http-request
-name: Create Cashflow Sales Note
 examples: .resources/Create Cashflow Sales Note.resources/examples
 order: 1000
 method: POST
@@ -15,7 +14,7 @@ body:
       "customerPhone": "+1234567890",
       "paidAmount": 100000,
       "noteFileLink": null,
-      "soldAt": "2026-08-27T00:00:00Z",
+      "soldAt": "2026-09-01T15:12:55Z",
       "createdBy": "{{userId}}",
       "updatedBy": "{{userId}}",
       "items": [

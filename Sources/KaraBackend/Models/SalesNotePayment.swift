@@ -10,9 +10,6 @@ final class SalesNotePayment: Model, @unchecked Sendable {
     @Parent(key: "sales_note_id")
     var salesNote: SalesNote
     
-    @Field(key: "sales_note_identifier")
-    var salesNoteIdentifier: String
-    
     @Field(key: "payment_attempt")
     var paymentAttempt: Int
     
@@ -26,10 +23,9 @@ final class SalesNotePayment: Model, @unchecked Sendable {
         
     }
     
-    init(id: UUID? = nil, salesNoteId: UUID, salesNoteIdentifier: String, paymentAttempt: Int, paidAmount: Int, paidAt: Date) {
+    init(id: UUID? = nil, salesNoteId: UUID, paymentAttempt: Int, paidAmount: Int, paidAt: Date) {
         self.id = id
         self.$salesNote.id = salesNoteId
-        self.salesNoteIdentifier = salesNoteIdentifier
         self.paymentAttempt = paymentAttempt
         self.paidAmount = paidAmount
         self.paidAt = paidAt

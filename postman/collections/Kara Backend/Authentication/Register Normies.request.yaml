@@ -1,0 +1,20 @@
+$kind: http-request
+name: Register Normies
+url: "{{baseUrl}}/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Ria Tan",
+      "phone": "08578987666",
+      "password": "secret123",
+      "shopName": "Pempek Palembang 99",
+      "shopDescription": "#1 Pempek se-Academy",
+      "shopAddress": "Thamrin",
+      "shopPhone": "08578987666"
+    }
+examples: .resources/Register Normies.resources/examples
+order: 1680

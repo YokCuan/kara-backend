@@ -2,16 +2,15 @@ $kind: http-request
 name: Create Sales Note
 order: 1000
 method: POST
-url: '{{baseUrl}}/sales_notes'
+url: "{{baseUrl}}/sales_notes"
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
   content: |-
     {
       "shopId": "{{shopId}}",
-      "customerName": "John Doe",
+      "customerName": "Jane Simpson",
       "customerPhone": "+1234567890",
       "totalAmount": 150000,
       "paidAmount": 100000,

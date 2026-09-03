@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{baseUrl}}/cashflow_sales_notes/:shopId/:id"
+method: PATCH
+headers:
+  Content-Type: application/json
+pathVariables:
+  shopId: 333d57d5-871a-4743-aa49-46ae0382989a
+  id: 4E6FA395-A11E-4386-81BC-4CE085AED0E7
+body:
+  type: json
+  content: |-
+    {
+      "paidAmount": 10000,
+      "paidAt": "2026-09-03T17:50:26Z"
+    }
+examples: .resources/Update Cashflow Sales Note Paid Amount.resources/examples
+order: 1033

@@ -19,7 +19,18 @@ struct CreateCashflowSalesNoteDTO: Content {
     let items: [CreateCashflowSalesNoteItemDTO]
 }
 
+struct UpdateCashflowSalesNotePaidAmountAndStatusDTO: Content {
+    let paidAmount: Int
+    let paidAt: Date
+}
+
 struct CashflowSalesNoteResponseDTO: Content {
     let salesNote: SalesNoteResponseDTO
     let salesNoteItems: [SalesNoteItemResponseDTO]
+    let salesNotePayments: [SalesNotePaymentResponseDTO]
+}
+
+struct CashflowSalesNotePaymentsResponseDTO: Content {
+    let salesNote: SalesNoteResponseDTO
+    let salesNotePayments: [SalesNotePaymentResponseDTO]
 }

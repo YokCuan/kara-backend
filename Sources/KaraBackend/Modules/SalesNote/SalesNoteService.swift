@@ -105,14 +105,4 @@ struct SalesNoteService: SalesNoteServiceProtocol, Sendable {
     func softDeleteByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws {
         return try await salesNoteRepository.softDeleteByIdAndShop(id, shopId: shopId, on: db)
     }
-    
-    private func paymentStatus(totalAmount: Int, paidAmount: Int) -> Status {
-        if paidAmount == totalAmount {
-            return .paid
-        } else if paidAmount == 0 {
-            return .notPaid
-        } else {
-            return .dpPaid
-        }
-    }
 }

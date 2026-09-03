@@ -69,32 +69,3 @@ struct SalesNoteItemRepository: SalesNoteItemRepositoryProtocol, Sendable {
             """).run()
     }
 }
-
-private struct SalesNoteItemRow: Decodable {
-    let id: UUID
-    let salesNoteId: UUID
-    let name: String
-    let quantity: Int
-    let unitPrice: Int
-    let subtotal: Int
-    
-    var salesNoteItem: SalesNoteItem {
-        SalesNoteItem(
-            id: id,
-            salesNoteId: salesNoteId,
-            name: name,
-            quantity: quantity,
-            unitPrice: unitPrice,
-            subtotal: subtotal
-        )
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case salesNoteId = "sales_note_id"
-        case name
-        case quantity
-        case unitPrice = "unit_price"
-        case subtotal
-    }
-}

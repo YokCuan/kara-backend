@@ -1,0 +1,89 @@
+$kind: http-example
+name: success
+request:
+  url: "{{baseUrl}}/cashflow_sales_notes"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "shopId": "{{shopId}}",
+        "customerName": "John Doe",
+        "customerPhone": "+1234567890",
+        "paidAmount": 100000,
+        "noteFileLink": null,
+        "soldAt": "2026-09-01T15:12:55Z",
+        "createdBy": "{{userId}}",
+        "updatedBy": "{{userId}}",
+        "items": [
+          {
+            "name": "Product A",
+            "quantity": 2,
+            "unitPrice": 40000
+          },
+          {
+            "name": "Product B",
+            "quantity": 1,
+            "unitPrice": 40000
+          }
+        ]
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "1009"
+    connection: keep-alive
+    date: Thu, 03 Sep 2026 12:54:29 GMT
+  body:
+    type: json
+    content: |-
+      {
+        "salesNotePayments": [
+          {
+            "paidAmount": 100000,
+            "paidAt": "2026-09-01T00:00:00Z",
+            "salesNoteId": "4E6FA395-A11E-4386-81BC-4CE085AED0E7",
+            "id": "73FDB853-7404-4073-8DA0-168371D677E5",
+            "paymentAttempt": 1
+          }
+        ],
+        "salesNoteItems": [
+          {
+            "quantity": 2,
+            "unitPrice": 40000,
+            "subtotal": 80000,
+            "salesNoteId": "4E6FA395-A11E-4386-81BC-4CE085AED0E7",
+            "id": "5B025B98-3101-4A12-834A-078FEECC6860",
+            "name": "Product A"
+          },
+          {
+            "quantity": 1,
+            "unitPrice": 40000,
+            "subtotal": 40000,
+            "salesNoteId": "4E6FA395-A11E-4386-81BC-4CE085AED0E7",
+            "id": "C25D122D-EE62-4A8B-B27B-8A8E64F44662",
+            "name": "Product B"
+          }
+        ],
+        "salesNote": {
+          "customerName": "John Doe",
+          "totalAmount": 120000,
+          "updatedBy": "D8E82A1A-615C-4FE3-8AB0-DF7A2B24A417",
+          "customerPhone": "+1234567890",
+          "isDeleted": false,
+          "identifier": "00006",
+          "soldAt": "2026-09-01T15:12:55Z",
+          "id": "4E6FA395-A11E-4386-81BC-4CE085AED0E7",
+          "updatedAt": "2026-09-03T12:54:26Z",
+          "createdBy": "D8E82A1A-615C-4FE3-8AB0-DF7A2B24A417",
+          "paidAmount": 100000,
+          "createdAt": "2026-09-03T12:54:26Z",
+          "shopId": "333D57D5-871A-4743-AA49-46AE0382989A",
+          "status": "dp_paid"
+        }
+      }
+order: 951820917499970

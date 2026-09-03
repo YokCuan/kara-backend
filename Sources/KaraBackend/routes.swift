@@ -51,16 +51,21 @@ func routes(_ app: Application) throws {
     //    MARK: - Sales Notes Related
     let salesNoteRepository = SalesNoteRepository()
     let salesNoteItemRepository = SalesNoteItemRepository()
+    let salesNotePaymentRepository = SalesNotePaymentRepository()
     
     let salesNoteService = SalesNoteService(salesNoteRepository: salesNoteRepository)
     let salesNoteItemService = SalesNoteItemService(salesNoteItemRepository: salesNoteItemRepository)
-    let cashflowSalesNoteService = CashflowSalesNoteService(salesNoteRepository: salesNoteRepository, salesNoteItemRepository: salesNoteItemRepository)
+    let salesNotePaymentService = SalesNotePaymentService(salesNotePaymentRepository: salesNotePaymentRepository)
+    let cashflowSalesNoteService = CashflowSalesNoteService(salesNoteRepository: salesNoteRepository, salesNoteItemRepository: salesNoteItemRepository, salesNotePaymentRepository: salesNotePaymentRepository)
     
     let salesNoteController = SalesNoteController(salesNoteService: salesNoteService)
     try app.register(collection: salesNoteController)
     
     let salesNoteItemController = SalesNoteItemController(salesNoteItemService: salesNoteItemService)
     try app.register(collection: salesNoteItemController)
+    
+    let salesNotePaymentController = SalesNotePaymentController(salesNotePaymentService: salesNotePaymentService)
+    try app.register(collection: salesNotePaymentController)
     
     let cashflowSalesNoteController = CashflowSalesNoteController(cashflowSalesNoteService: cashflowSalesNoteService)
     try app.register(collection: cashflowSalesNoteController)

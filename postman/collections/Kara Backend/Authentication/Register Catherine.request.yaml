@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{baseUrl}}/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Catherine Augustus Andorhal",
+      "phone": "08012345678",
+      "password": "secret123",
+      "shopName": "Andorhal Weaponry",
+      "shopDescription": "#1 Weaponry in DisCity",
+      "shopAddress": "Eastside, DisCity",
+      "shopPhone": "08012345678"
+    }
+examples: .resources/Register Catherine.resources/examples
+order: 1000

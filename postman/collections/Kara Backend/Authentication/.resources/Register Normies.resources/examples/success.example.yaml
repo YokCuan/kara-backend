@@ -1,0 +1,45 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/auth/register"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "name": "Catherine Augustus Andorhal",
+        "phone": "08012345678",
+        "password": "secret123",
+        "shopName": "Andorhal Weaponry",
+        "shopDescription": "#1 Weaponry in DisCity",
+        "shopAddress": "Eastside, DisCity",
+        "shopPhone": "08012345678"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "333"
+    connection: keep-alive
+    date: Wed, 26 Aug 2026 02:41:41 GMT
+  body:
+    type: text
+    content: |-
+      {
+          "shop": {
+              "id": "28F6C248-5D46-40C5-8FA3-323BFDF3F9CC",
+              "description": "#1 Weaponry in DisCity",
+              "name": "Andorhal Weaponry",
+              "address": "Eastside, DisCity",
+              "ownerId": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+              "phone": "08012345678"
+          },
+          "user": {
+              "id": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+              "name": "Catherine Augustus Andorhal",
+              "phone": "08012345678"
+          }
+      }
+order: 1000

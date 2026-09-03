@@ -1,0 +1,188 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/cashflow_sales_notes/:shopId"
+  method: GET
+  headers:
+    Content-Type: application/json
+  pathVariables:
+    shopId: 333d57d5-871a-4743-aa49-46ae0382989a
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "3772"
+    connection: keep-alive
+    date: Thu, 03 Sep 2026 13:02:24 GMT
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "salesNotePayments": [],
+          "salesNoteItems": [
+            {
+              "quantity": 2,
+              "name": "Product A",
+              "unitPrice": 40000,
+              "salesNoteId": "0A2CEEAB-7EA8-4810-83B5-6A406C1A32AF",
+              "id": "71C946C5-28DB-41A9-A17C-AA3B5D5F529D",
+              "subtotal": 80000
+            },
+            {
+              "quantity": 1,
+              "name": "Product B",
+              "unitPrice": 40000,
+              "salesNoteId": "0A2CEEAB-7EA8-4810-83B5-6A406C1A32AF",
+              "id": "DFB888D7-2BC0-4627-8F9C-CCA97A2FBC1D",
+              "subtotal": 40000
+            }
+          ],
+          "salesNote": {
+            "id": "0A2CEEAB-7EA8-4810-83B5-6A406C1A32AF",
+            "soldAt": "2026-08-27T00:00:00Z",
+            "updatedAt": "2026-08-29T14:44:22Z",
+            "isDeleted": false,
+            "totalAmount": 120000,
+            "createdBy": "A48AF36C-F755-42E1-A854-70989252CA6C",
+            "identifier": "00001",
+            "createdAt": "2026-08-29T14:44:22Z",
+            "paidAmount": 100000,
+            "customerPhone": "+1234567890",
+            "status": "dp_paid",
+            "customerName": "John Doe",
+            "updatedBy": "A48AF36C-F755-42E1-A854-70989252CA6C",
+            "shopId": "333D57D5-871A-4743-AA49-46AE0382989A"
+          }
+        },
+        {
+          "salesNotePayments": [],
+          "salesNoteItems": [],
+          "salesNote": {
+            "id": "D3773A81-32C1-4915-8BC4-68F85E5E3A9B",
+            "soldAt": "2026-08-27T00:00:00Z",
+            "updatedAt": "2026-09-03T04:17:10Z",
+            "isDeleted": false,
+            "totalAmount": 150000,
+            "createdBy": "admin",
+            "identifier": "00002",
+            "createdAt": "2026-09-03T04:17:10Z",
+            "paidAmount": 100000,
+            "customerPhone": "+1234567890",
+            "status": "dp_paid",
+            "customerName": "John Doe",
+            "updatedBy": "admin",
+            "shopId": "333D57D5-871A-4743-AA49-46AE0382989A",
+            "dueAt": "2026-09-30T00:00:00Z"
+          }
+        },
+        {
+          "salesNotePayments": [],
+          "salesNoteItems": [],
+          "salesNote": {
+            "id": "7DA74712-3A0F-48A9-A9FB-26D1EF1D29B7",
+            "soldAt": "2026-08-27T00:00:00Z",
+            "updatedAt": "2026-09-03T04:17:13Z",
+            "isDeleted": false,
+            "totalAmount": 150000,
+            "createdBy": "admin",
+            "identifier": "00003",
+            "createdAt": "2026-09-03T04:17:13Z",
+            "paidAmount": 100000,
+            "customerPhone": "+1234567890",
+            "status": "dp_paid",
+            "customerName": "John Doe",
+            "updatedBy": "admin",
+            "shopId": "333D57D5-871A-4743-AA49-46AE0382989A",
+            "dueAt": "2026-09-30T00:00:00Z"
+          }
+        },
+        {
+          "salesNotePayments": [],
+          "salesNoteItems": [],
+          "salesNote": {
+            "id": "39BCE3F4-1310-45C6-B9B1-662B79E38E0E",
+            "soldAt": "2026-08-27T00:00:00Z",
+            "updatedAt": "2026-09-03T04:17:16Z",
+            "isDeleted": false,
+            "totalAmount": 150000,
+            "createdBy": "admin",
+            "identifier": "00004",
+            "createdAt": "2026-09-03T04:17:16Z",
+            "paidAmount": 100000,
+            "customerPhone": "+1234567890",
+            "status": "dp_paid",
+            "customerName": "John Doe",
+            "updatedBy": "admin",
+            "shopId": "333D57D5-871A-4743-AA49-46AE0382989A",
+            "dueAt": "2026-09-30T00:00:00Z"
+          }
+        },
+        {
+          "salesNotePayments": [],
+          "salesNoteItems": [],
+          "salesNote": {
+            "id": "11E9538A-2DEB-4A9D-B8AB-51EF88A0FA00",
+            "soldAt": "2026-08-27T00:00:00Z",
+            "updatedAt": "2026-09-03T04:17:40Z",
+            "isDeleted": false,
+            "totalAmount": 150000,
+            "createdBy": "admin",
+            "identifier": "00005",
+            "createdAt": "2026-09-03T04:17:40Z",
+            "paidAmount": 100000,
+            "customerPhone": "+1234567890",
+            "status": "dp_paid",
+            "customerName": "Jane Simpson",
+            "updatedBy": "admin",
+            "shopId": "333D57D5-871A-4743-AA49-46AE0382989A",
+            "dueAt": "2026-09-30T00:00:00Z"
+          }
+        },
+        {
+          "salesNotePayments": [
+            {
+              "paymentAttempt": 1,
+              "salesNoteId": "4E6FA395-A11E-4386-81BC-4CE085AED0E7",
+              "id": "73FDB853-7404-4073-8DA0-168371D677E5",
+              "paidAmount": 100000,
+              "paidAt": "2026-09-01T00:00:00Z"
+            }
+          ],
+          "salesNoteItems": [
+            {
+              "quantity": 2,
+              "name": "Product A",
+              "unitPrice": 40000,
+              "salesNoteId": "4E6FA395-A11E-4386-81BC-4CE085AED0E7",
+              "id": "5B025B98-3101-4A12-834A-078FEECC6860",
+              "subtotal": 80000
+            },
+            {
+              "quantity": 1,
+              "name": "Product B",
+              "unitPrice": 40000,
+              "salesNoteId": "4E6FA395-A11E-4386-81BC-4CE085AED0E7",
+              "id": "C25D122D-EE62-4A8B-B27B-8A8E64F44662",
+              "subtotal": 40000
+            }
+          ],
+          "salesNote": {
+            "id": "4E6FA395-A11E-4386-81BC-4CE085AED0E7",
+            "soldAt": "2026-09-01T15:12:55Z",
+            "updatedAt": "2026-09-03T12:54:26Z",
+            "isDeleted": false,
+            "totalAmount": 120000,
+            "createdBy": "D8E82A1A-615C-4FE3-8AB0-DF7A2B24A417",
+            "identifier": "00006",
+            "createdAt": "2026-09-03T12:54:26Z",
+            "paidAmount": 100000,
+            "customerPhone": "+1234567890",
+            "status": "dp_paid",
+            "customerName": "John Doe",
+            "updatedBy": "D8E82A1A-615C-4FE3-8AB0-DF7A2B24A417",
+            "shopId": "333D57D5-871A-4743-AA49-46AE0382989A"
+          }
+        }
+      ]
+order: 3923430282714433

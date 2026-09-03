@@ -1,0 +1,8 @@
+name: Production
+values:
+  - key: baseUrl
+    value: ''
+  - key: userId
+    value: ''
+  - key: shopId
+    value: ''

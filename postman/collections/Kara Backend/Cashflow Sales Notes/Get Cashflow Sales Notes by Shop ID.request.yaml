@@ -4,6 +4,6 @@ method: GET
 headers:
   Content-Type: application/json
 pathVariables:
-  shopId: 28F6C248-5D46-40C5-8FA3-323BFDF3F9CC
+  shopId: 333d57d5-871a-4743-aa49-46ae0382989a
 examples: .resources/Get Cashflow Sales Notes by Shop ID.resources/examples
 order: 3791331470082363

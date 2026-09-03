@@ -7,6 +7,7 @@ protocol SalesNoteRepositoryProtocol: Sendable {
     func findAllByShop(_ shopId: UUID, on db: any Database) async throws -> [SalesNote]
     func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> SalesNote?
     func findByShopAndIdentifier(_ shopId: UUID, identifier: String, on db: any Database) async throws -> SalesNote?
+    func findAllCustomersByShop(_ shopId: UUID, on db: any Database) async throws -> [CustomerRow]
     func update(_ id: UUID, shopId: UUID, customerName: String?, customerPhone: String?, totalAmount: Int, paidAmount: Int, status: Status, noteFileLink: String?, dueAt: Date?, soldAt: Date, updatedBy: String, on db: any Database) async throws -> SalesNote
     func updatePaidAmount(_ id: UUID, shopId: UUID, paidAmount: Int, status: Status, updatedBy: String, on db: any Database) async throws -> SalesNote
     func softDeleteByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws
@@ -81,6 +82,32 @@ struct SalesNoteRepository: SalesNoteRepositoryProtocol, Sendable {
             """).first(decoding: SalesNoteRow.self)
         
         return salesNote?.salesNote
+    }
+    
+    func findAllCustomersByShop(_ shopId: UUID, on db: any Database) async throws -> [CustomerRow] {
+        guard let sql = db as? any SQLDatabase else {
+            throw Abort(.internalServerError, reason: "Database connection error")
+        }
+        
+        let allCustomers = try await sql.raw("""
+            SELECT
+                customer_name,
+                customer_phone,
+                COUNT(*) AS sales_note_count,
+                MAX(sold_at) AS last_sold_at
+            FROM sales_notes
+            WHERE shop_id = \(bind: shopId)
+              AND is_deleted = false
+            GROUP BY
+                customer_name,
+                customer_phone
+            ORDER BY
+                sales_note_count DESC,
+                last_sold_at DESC,
+                customer_name ASC
+            """).all(decoding: CustomerRow.self)
+        
+        return allCustomers
     }
     
     func update(_ id: UUID, shopId: UUID, customerName: String?, customerPhone: String?, totalAmount: Int, paidAmount: Int, status: Status, noteFileLink: String?, dueAt: Date?, soldAt: Date, updatedBy: String, on db: any Database) async throws -> SalesNote {

@@ -10,6 +10,7 @@ extension Application {
         self.migrations.add(CreateExpenseItem())
         self.migrations.add(CreateSalesNote())
         self.migrations.add(CreateSalesNoteItem())
+        self.migrations.add(CreateSalesNotePayment())
         addSeedMigrations()
     }
 }

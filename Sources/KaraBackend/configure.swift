@@ -39,44 +39,10 @@ func configure(_ app: Application) async throws {
     app.addMigrations()
     app.migrations.add(JobMetadataMigrate())
     app.queues.use(.fluent())
-    try await app.autoMigrate()
     
-    guard let accountId = Environment.get("R2_ACCOUNT_ID"),
-          let accessKey = Environment.get("R2_ACCESS_KEY_ID"),
-          let secretKey = Environment.get("R2_SECRET_ACCESS_KEY"),
-          let bucket = Environment.get("R2_BUCKET")
-    else {
-        fatalError("Missing R2 environment variables")
+    if !app.environment.arguments.contains("migrate") {
+        app.configureR2()
     }
-    
-    let endpoint = "https://\(accountId).r2.cloudflarestorage.com"
-    
-    let awsClient = AWSClient(
-        credentialProvider: .static(
-            accessKeyId: accessKey,
-            secretAccessKey: secretKey
-        )
-    )
-    
-    let s3 = S3(
-        client: awsClient,
-        endpoint: endpoint
-    )
-    
-    app.storage[ R2StorageKey.self ] = R2StorageService(
-        client: s3,
-        bucket: bucket
-    )
-    
-    app.lifecycle.use(R2ShutdownHandler(client: awsClient))
     
     try routes(app)
-}
-
-struct R2ShutdownHandler: LifecycleHandler {
-    let client: AWSClient
-
-    func shutdownAsync(_ application: Application) async throws {
-        try await client.shutdown()
-    }
 }

@@ -1,0 +1,26 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/sales_notes/customers/:shopId"
+  method: GET
+  pathVariables:
+    shopId: 333d57d5-871a-4743-aa49-46ae0382989a
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "114"
+    connection: keep-alive
+    date: Thu, 03 Sep 2026 04:16:49 GMT
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "salesNoteCount": 1,
+          "lastSoldAt": "2026-08-27T00:00:00Z",
+          "customerPhone": "+1234567890",
+          "customerName": "John Doe"
+        }
+      ]
+order: 1788409016687

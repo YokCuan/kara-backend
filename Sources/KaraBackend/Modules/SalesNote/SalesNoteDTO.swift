@@ -75,3 +75,24 @@ struct SalesNoteByShopAndCustomerNameDTO: Content {
     let shopId: UUID
     let customerName: String?
 }
+
+struct CustomerRow: Decodable {
+    let customerName: String
+    let customerPhone: String?
+    let salesNoteCount: Int
+    let lastSoldAt: Date
+
+    enum CodingKeys: String, CodingKey {
+        case customerName = "customer_name"
+        case customerPhone = "customer_phone"
+        case salesNoteCount = "sales_note_count"
+        case lastSoldAt = "last_sold_at"
+    }
+}
+
+struct CustomerResponseDTO: Content {
+    let customerName: String
+    let customerPhone: String?
+    let salesNoteCount: Int
+    let lastSoldAt: Date
+}

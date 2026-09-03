@@ -9,6 +9,7 @@ struct ExpenseController: RouteCollection {
         
         expenses.post(use: create)
         expenses.get(use: findAll)
+        expenses.get("suppliers", ":shopId", use: findAllSuppliersByShop)
         expenses.get(":shopId", ":id", use: findByIdAndShop)
     }
     
@@ -53,4 +54,16 @@ struct ExpenseController: RouteCollection {
         
         return expense
     }
+    
+    func findAllSuppliersByShop(req: Request) async throws -> [SupplierResponseDTO] {
+        guard let shopId = req.parameters.get("shopId", as: UUID.self) else {
+            throw Abort(.badRequest, reason: "Invalid shop ID")
+        }
+        
+        return try await expenseService.findAllSuppliersByShop(
+            shopId,
+            on: req.db
+        )
+    }
+    
 }

@@ -6,6 +6,7 @@ protocol ExpenseServiceProtocol: Sendable {
     func findAllByShop(_ shopId: UUID, on db: any Database) async throws -> [ExpenseResponseDTO]
     func findAllByShopAndCategory(_ shopId: UUID, expenseCategoryId: UUID, on db: any Database) async throws -> [ExpenseResponseDTO]
     func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> ExpenseResponseDTO?
+    func findAllSuppliersByShop(_ shopId: UUID, on db: any Database) async throws -> [SupplierResponseDTO]
 }
 
 struct ExpenseService: ExpenseServiceProtocol, Sendable {
@@ -49,4 +50,21 @@ struct ExpenseService: ExpenseServiceProtocol, Sendable {
         }
         return try ExpenseResponseDTO(expense: expense)
     }
+    
+    func findAllSuppliersByShop(_ shopId: UUID, on db: any Database) async throws -> [SupplierResponseDTO] {
+        let suppliers = try await expenseRepository.findAllSuppliersByShop(
+            shopId,
+            on: db
+        )
+        
+        return suppliers.map {
+            SupplierResponseDTO(
+                supplierName: $0.supplierName,
+                supplierPhone: $0.supplierPhone,
+                expenseCount: $0.expenseCount,
+                lastPurchasedAt: $0.lastPurchasedAt
+            )
+        }
+    }
+    
 }

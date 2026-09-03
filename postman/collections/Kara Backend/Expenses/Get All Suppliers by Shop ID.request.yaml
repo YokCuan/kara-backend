@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/expenses/suppliers/:shopId"
+method: GET
+pathVariables:
+  shopId: 333d57d5-871a-4743-aa49-46ae0382989a
+examples: .resources/Get All Suppliers by Shop ID.resources/examples
+order: 2913

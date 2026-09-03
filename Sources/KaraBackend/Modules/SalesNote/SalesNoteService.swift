@@ -7,6 +7,7 @@ protocol SalesNoteServiceProtocol: Sendable {
     func findAllByShop(_ shopId: UUID, on db: any Database) async throws -> [SalesNoteResponseDTO]
     func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> SalesNoteResponseDTO?
     func findByShopAndIdentifier(_ shopId: UUID, identifier: String, on db: any Database) async throws -> SalesNoteResponseDTO?
+    func findAllCustomersByShop(_ shopId: UUID, on db: any Database) async throws -> [CustomerResponseDTO]
     func softDeleteByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws
 }
 
@@ -83,6 +84,22 @@ struct SalesNoteService: SalesNoteServiceProtocol, Sendable {
             return nil
         }
         return try SalesNoteResponseDTO(salesNote: salesNote)
+    }
+    
+    func findAllCustomersByShop(_ shopId: UUID, on db: any Database) async throws -> [CustomerResponseDTO] {
+        let customers = try await salesNoteRepository.findAllCustomersByShop(
+            shopId,
+            on: db
+        )
+
+        return customers.map {
+            CustomerResponseDTO(
+                customerName: $0.customerName,
+                customerPhone: $0.customerPhone,
+                salesNoteCount: $0.salesNoteCount,
+                lastSoldAt: $0.lastSoldAt
+            )
+        }
     }
     
     func softDeleteByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws {

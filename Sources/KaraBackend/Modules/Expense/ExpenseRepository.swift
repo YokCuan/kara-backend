@@ -8,6 +8,7 @@ protocol ExpenseRepositoryProtocol: Sendable {
     func findAllByShopWithCategory(_ shopId: UUID, on db: any Database) async throws -> [CashflowExpenseRow]
     func findAllByShopAndCategory(_ shopId: UUID, expenseCategoryId: UUID, on db: any Database) async throws -> [Expense]
     func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> Expense?
+    func findAllSuppliersByShop(_ shopId: UUID, on db: any Database) async throws -> [SupplierRow]
     func update(_ id: UUID, shopId: UUID, expenseCategoryId: UUID, supplierName: String?, supplierPhone: String?, paidAmount: Int, purchasedAt: Date, updatedBy: String, on db: any Database) async throws -> Expense
     func deleteById(_ id: UUID, on db: any Database) async throws
 }
@@ -94,6 +95,31 @@ struct ExpenseRepository: ExpenseRepositoryProtocol, Sendable {
             """).first(decoding: ExpenseRow.self)
         
         return expense?.expense
+    }
+    
+    func findAllSuppliersByShop(_ shopId: UUID, on db: any Database) async throws -> [SupplierRow] {
+        guard let sql = db as? any SQLDatabase else {
+            throw Abort(.internalServerError, reason: "Database connection error")
+        }
+        
+        let allSuppliers = try await sql.raw("""
+            SELECT
+                supplier_name,
+                supplier_phone,
+                COUNT(*) AS expense_count,
+                MAX(purchased_at) AS last_purchased_at
+            FROM expenses
+            WHERE shop_id = \(bind: shopId)
+            GROUP BY
+                supplier_name,
+                supplier_phone
+            ORDER BY
+                expense_count DESC,
+                last_purchased_at DESC,
+                supplier_name ASC
+            """).all(decoding: SupplierRow.self)
+        
+        return allSuppliers
     }
     
     func update(_ id: UUID, shopId: UUID, expenseCategoryId: UUID, supplierName: String?, supplierPhone: String?, paidAmount: Int, purchasedAt: Date, updatedBy: String, on db: any Database) async throws -> Expense {

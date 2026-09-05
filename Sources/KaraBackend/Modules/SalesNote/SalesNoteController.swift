@@ -8,6 +8,7 @@ struct SalesNoteController: RouteCollection {
         let salesNotes = routes.grouped("sales_notes")
         
         salesNotes.post(use: create)
+        salesNotes.get("detailed", ":shopId", use: detailedFindAllByShop)
         salesNotes.get(":shopId", use: findAllByShop)
         salesNotes.get("customers", ":shopId", use: findAllCustomersByShop)
         salesNotes.get(":shopId", ":id", use: findByIdAndShop)
@@ -50,6 +51,19 @@ struct SalesNoteController: RouteCollection {
         }
         
         return try await salesNoteService.findAllByShop(
+            shopId,
+            on: req.db
+        )
+    }
+    
+    func detailedFindAllByShop(req: Request) async throws -> [DetailedCashflowSalesNoteDTO] {
+        req.logger.info("Matched GET /sales_notes/detailed/:shopId")
+        req.logger.info("Parameters: \(req.parameters)")
+        guard let shopId = req.parameters.get("shopId", as: UUID.self) else {
+            throw Abort(.badRequest, reason: "Invalid shop ID")
+        }
+        
+        return try await salesNoteService.detailedFindAllByShop(
             shopId,
             on: req.db
         )

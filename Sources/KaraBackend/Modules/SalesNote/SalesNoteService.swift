@@ -5,6 +5,7 @@ protocol SalesNoteServiceProtocol: Sendable {
     func create(_ data: CreateSalesNoteDTO, on db: any Database) async throws -> SalesNoteResponseDTO
     func addSalesNotePaidAmount(_ id: UUID, shopId: UUID, data: AddSalesNotePaymentDTO, on db: any Database) async throws -> SalesNoteResponseDTO
     func findAllByShop(_ shopId: UUID, on db: any Database) async throws -> [SalesNoteResponseDTO]
+    func detailedFindAllByShop(_ shopId: UUID, on db: any Database) async throws -> [DetailedCashflowSalesNoteDTO]
     func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> SalesNoteResponseDTO?
     func findByShopAndIdentifier(_ shopId: UUID, identifier: String, on db: any Database) async throws -> SalesNoteResponseDTO?
     func findAllCustomersByShop(_ shopId: UUID, on db: any Database) async throws -> [CustomerResponseDTO]
@@ -70,6 +71,11 @@ struct SalesNoteService: SalesNoteServiceProtocol, Sendable {
         return try salesNotes.map { salesNote in
             try SalesNoteResponseDTO(salesNote: salesNote)
         }
+    }
+    
+    func detailedFindAllByShop(_ shopId: UUID, on db: any Database) async throws -> [DetailedCashflowSalesNoteDTO] {
+        let salesNotes = try await salesNoteRepository.detailedFindAllByShop(shopId, on: db)
+        return salesNotes
     }
     
     func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> SalesNoteResponseDTO? {

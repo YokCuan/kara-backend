@@ -5,6 +5,7 @@ import SQLKit
 protocol SalesNoteRepositoryProtocol: Sendable {
     func create(shopId: UUID, customerName: String, customerPhone: String?, totalAmount: Int, paidAmount: Int, status: Status, noteFileLink: String?, dueAt: Date?, soldAt: Date, createdBy: String, updatedBy: String, on db: any Database) async throws -> SalesNote
     func findAllByShop(_ shopId: UUID, on db: any Database) async throws -> [SalesNote]
+    func detailedFindAllByShop(_ shopId: UUID, on db: any Database) async throws -> [DetailedCashflowSalesNoteDTO]
     func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> SalesNote?
     func findByShopAndIdentifier(_ shopId: UUID, identifier: String, on db: any Database) async throws -> SalesNote?
     func findAllCustomersByShop(_ shopId: UUID, on db: any Database) async throws -> [CustomerRow]
@@ -52,6 +53,70 @@ struct SalesNoteRepository: SalesNoteRepositoryProtocol, Sendable {
             """).all(decoding: SalesNoteRow.self)
         
         return allSalesNotes.map(\.salesNote)
+    }
+    
+    func detailedFindAllByShop(_ shopId: UUID, on db: any Database) async throws -> [DetailedCashflowSalesNoteDTO] {
+        guard let sql = db as? any SQLDatabase else {
+            throw Abort(.internalServerError, reason: "Database connection error")
+        }
+
+        let allSalesNotes = try await sql.raw("""
+            SELECT
+                sn.id AS "id",
+                sn.shop_id AS "shopId",
+                sn.identifier AS "identifier",
+                sn.customer_name AS "customerName",
+                sn.customer_phone AS "customerPhone",
+                sn.total_amount AS "totalAmount",
+                sn.paid_amount AS "paidAmount",
+                sn.status AS "status",
+                sn.note_file_link AS "noteFileLink",
+                sn.due_at AS "dueAt",
+                sn.sold_at AS "soldAt",
+                sn.created_at AS "createdAt",
+                sn.updated_at AS "updatedAt",
+                sn.created_by AS "createdBy",
+                sn.updated_by AS "updatedBy",
+                sn.is_deleted AS "isDeleted",
+                COALESCE(
+                    (
+                        SELECT jsonb_agg(
+                            jsonb_build_object(
+                                'name', sni.name,
+                                'quantity', sni.quantity,
+                                'unitPrice', sni.unit_price,
+                                'subtotal', sni.subtotal
+                            )
+                            ORDER BY sni.id
+                        )
+                        FROM sales_note_items sni
+                        WHERE sni.sales_note_id = sn.id
+                    ),
+                    '[]'::jsonb
+                ) AS "items",
+                COALESCE(
+                    (
+                        SELECT jsonb_agg(
+                            jsonb_build_object(
+                                'id', snp.id,
+                                'paymentAttempt', snp.payment_attempt,
+                                'paidAmount', snp.paid_amount,
+                                'paidAt', EXTRACT(EPOCH FROM snp.paid_at)
+                            )
+                            ORDER BY snp.payment_attempt ASC
+                        )
+                        FROM sales_note_payments snp
+                        WHERE snp.sales_note_id = sn.id
+                    ),
+                    '[]'::jsonb
+                ) AS "payments"
+            FROM sales_notes sn
+            WHERE sn.shop_id = \(bind: shopId)
+              AND sn.is_deleted = false
+            ORDER BY sn.identifier ASC
+        """).all(decoding: DetailedCashflowSalesNoteDTO.self)
+        
+        return allSalesNotes
     }
     
     func findByIdAndShop(_ id: UUID, shopId: UUID, on db: any Database) async throws -> SalesNote? {

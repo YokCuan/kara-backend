@@ -1,4 +1,5 @@
 $kind: http-request
+name: Create Cashflow Sales Note
 examples: .resources/Create Cashflow Sales Note.resources/examples
 order: 1000
 method: POST
@@ -10,23 +11,23 @@ body:
   content: |-
     {
       "shopId": "{{shopId}}",
-      "customerName": "John Doe",
+      "customerName": "Deren",
       "customerPhone": "+1234567890",
-      "paidAmount": 100000,
+      "paidAmount": 150000,
       "noteFileLink": null,
-      "soldAt": "2026-09-01T15:12:55Z",
+      "soldAt": "2026-09-05T15:12:55Z",
       "createdBy": "{{userId}}",
       "updatedBy": "{{userId}}",
       "items": [
         {
-          "name": "Product A",
-          "quantity": 2,
-          "unitPrice": 40000
+          "name": "Maniac Gun",
+          "quantity": 1,
+          "unitPrice": 50000
         },
         {
-          "name": "Product B",
+          "name": "Maniac Sniper Rifle",
           "quantity": 1,
-          "unitPrice": 40000
+          "unitPrice": 100000
         }
       ]
     }

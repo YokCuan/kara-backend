@@ -7,25 +7,21 @@ protocol CashflowServiceProtocol: Sendable {
 
 struct CashflowService: CashflowServiceProtocol, Sendable {
     let expenseRepository: any ExpenseRepositoryProtocol
-    let salesNoteRepository: any SalesNoteRepositoryProtocol
+    let salesNotePaymentRepository: any SalesNotePaymentRepositoryProtocol
 
     func findAllByShop(_ shopId: UUID,on db: any Database) async throws -> [CashflowResponseDTO] {
         async let expensesTask = expenseRepository.findAllByShopWithCategory(
             shopId,
             on: db
         )
-
-        async let salesNotesTask = salesNoteRepository.findAllByShop(
-            shopId,
-            on: db
-        )
-
-        let (expenses, salesNotes) = try await (
+        async let salesNotePaymentsTask = salesNotePaymentRepository.findAllForCashflowByShop(shopId, on: db)
+        
+        let (expenses, salesNotePayments) = try await (
             expensesTask,
-            salesNotesTask
+            salesNotePaymentsTask
         )
 
-        let expenseEntries = expenses.map { expense in
+        let expenseEntries: [CashflowResponseDTO] = expenses.map { expense in
             return CashflowResponseDTO(
                 id: expense.id,
                 type: .expense,
@@ -37,23 +33,24 @@ struct CashflowService: CashflowServiceProtocol, Sendable {
             )
         }
 
-        let salesNoteEntries = try salesNotes.map { salesNote in
-            guard let id = salesNote.id else {
-                throw Abort(.internalServerError, reason: "Sales note ID is missing")
-            }
-
-            return CashflowResponseDTO(
-                id: id,
+        let salesNotePaymentEntries: [CashflowResponseDTO] = salesNotePayments.map { salesNotePayment in
+            CashflowResponseDTO(
+                id: salesNotePayment.salesNoteId,
                 type: .salesNote,
                 categoryType: "Penjualan",
-                amount: salesNote.paidAmount,
-                occurredAt: salesNote.soldAt,
-                title: salesNote.customerName,
-                description: salesNote.identifier
+                amount: salesNotePayment.amount,
+                occurredAt: salesNotePayment.paidAt,
+                title: salesNotePayment.customerName,
+                description: makeSalesPaymentDescription(
+                    identifier: salesNotePayment.identifier,
+                    paymentAttempt: salesNotePayment.paymentAttempt,
+                    paymentCount: salesNotePayment.paymentCount,
+                    status: salesNotePayment.salesNoteStatus
+                )
             )
         }
 
-        return (expenseEntries + salesNoteEntries)
+        return (expenseEntries + salesNotePaymentEntries)
             .sorted { $0.occurredAt > $1.occurredAt }
     }
 }

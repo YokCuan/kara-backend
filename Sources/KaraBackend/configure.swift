@@ -43,6 +43,6 @@ func configure(_ app: Application) async throws {
     if !app.environment.arguments.contains("migrate") {
         app.configureR2()
     }
-    
+    app.passwords.use(.bcrypt)
     try routes(app)
 }

@@ -96,3 +96,24 @@ struct CustomerResponseDTO: Content {
     let salesNoteCount: Int
     let lastSoldAt: Date
 }
+
+struct CashflowSalesNotePaymentDTO: Content {
+    let id: UUID
+    let paymentAttempt: Int
+    let paidAmount: Int
+    let paidAt: Date
+}
+
+struct DetailedCashflowSalesNoteDTO: Content {
+    let shopId: UUID
+    let customerName: String
+    let customerPhone: String?
+    let paidAmount: Int
+    let noteFileLink: String?
+    let dueAt: Date?
+    let soldAt: Date
+    let createdBy: String
+    let updatedBy: String
+    let items: [CreateCashflowSalesNoteItemDTO]
+    let payments: [CashflowSalesNotePaymentDTO]
+}

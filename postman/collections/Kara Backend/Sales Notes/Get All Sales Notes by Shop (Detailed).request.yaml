@@ -1,0 +1,6 @@
+$kind: http-request
+name: Get All Sales Notes by Shop (Detailed)
+url: http://127.0.0.1:8080/sales_notes/detailed/333d57d5-871a-4743-aa49-46ae0382989a
+method: GET
+examples: .resources/Get All Sales Notes by Shop (Detailed).resources/examples
+order: 2058

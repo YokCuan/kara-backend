@@ -10,12 +10,17 @@ func routes(_ app: Application) throws {
     }
     
     //    MARK: - User & Shop Related
+    let authTokenRepository = AuthTokenRepository()
+    
+    let authTokenService = AuthTokenService(authTokenRepository: authTokenRepository)
+    
+    //    MARK: - User & Shop Related
     let userRepository = UserRepository()
     let shopRepository = ShopRepository()
     
     let userService = UserService(userRepository: userRepository)
     let shopService = ShopService(shopRepository: shopRepository)
-    let authenticationService = AuthenticationService(userService: userService, shopService: shopService)
+    let authenticationService = AuthenticationService(userService: userService, shopService: shopService, authTokenService: authTokenService)
     
     let userController = UserController(userService: userService)
     try app.register(collection: userController)

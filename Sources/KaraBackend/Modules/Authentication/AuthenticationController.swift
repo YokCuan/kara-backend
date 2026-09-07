@@ -8,17 +8,17 @@ struct AuthenticationController: RouteCollection {
     func boot(routes: any RoutesBuilder) throws {
         let auth = routes.grouped("auth")
 
-        auth.post("register", use: register)
-        auth.post("login", use: login)
+        auth.post("register", use: registerWithPassword)
+        auth.post("login", use: loginWithPassword)
     }
 
-    func register(req: Request) async throws -> RegisterResponseDTO {
-        let dto = try req.content.decode(RegisterDTO.self)
-        return try await authenticationService.register(dto, on: req.db)
+    func registerWithPassword(req: Request) async throws -> AuthenticationResponseDTO {
+        let dto = try req.content.decode(RegisterWithPasswordDTO.self)
+        return try await authenticationService.registerWithPassword(dto, on: req.db)
     }
 
-    func login(req: Request) async throws -> UserResponseDTO {
-        let dto = try req.content.decode(LoginDTO.self)
-        return try await authenticationService.login(dto, on: req.db)
+    func loginWithPassword(req: Request) async throws -> AuthenticationResponseDTO {
+        let dto = try req.content.decode(LoginWithPasswordDTO.self)
+        return try await authenticationService.loginWithPassword(dto, on: req.db)
     }
 }

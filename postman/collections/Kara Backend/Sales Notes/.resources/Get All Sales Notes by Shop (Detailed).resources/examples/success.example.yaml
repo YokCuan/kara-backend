@@ -1,0 +1,52 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/sales_notes/{{shopId}}"
+  method: GET
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "969"
+    connection: keep-alive
+    date: Sat, 29 Aug 2026 04:27:36 GMT
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "paidAmount": 100000,
+          "customerPhone": "+1234567890",
+          "totalAmount": 120000,
+          "dueAt": "2026-09-30T00:00:00Z",
+          "id": "44CAD8B2-3012-4109-B3E1-2E5FEF0A2DF4",
+          "createdBy": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+          "updatedBy": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+          "identifier": "00001",
+          "soldAt": "2026-08-27T00:00:00Z",
+          "isDeleted": false,
+          "status": "dp_paid",
+          "customerName": "John Doe",
+          "updatedAt": "2026-08-27T02:56:42Z",
+          "shopId": "28F6C248-5D46-40C5-8FA3-323BFDF3F9CC",
+          "createdAt": "2026-08-27T02:56:42Z"
+        },
+        {
+          "isDeleted": false,
+          "shopId": "28F6C248-5D46-40C5-8FA3-323BFDF3F9CC",
+          "customerName": "John Doe",
+          "id": "5AD5E392-39BA-485A-8BA8-38D2BA4133C4",
+          "identifier": "00002",
+          "dueAt": "2026-09-30T00:00:00Z",
+          "paidAmount": 100000,
+          "createdBy": "E7E66842-D5F5-410F-A38F-A3F36220B46B",
+          "totalAmount": 120000,
+          "createdAt": "2026-08-27T03:03:19Z",
+          "updatedAt": "2026-08-27T03:03:19Z",
+          "soldAt": "2026-08-27T00:00:00Z",
+          "customerPhone": "+1234567890",
+          "status": "dp_paid",
+          "updatedBy": "E7E66842-D5F5-410F-A38F-A3F36220B46B"
+        }
+      ]
+order: 1787977660153

@@ -15,5 +15,5 @@ body:
       "shopAddress": "Eastside, DisCity",
       "shopPhone": "08012345678"
     }
-examples: ./.resources/Register.resources/examples
-order: 1000
+examples: .resources/Register Catherine.resources/examples
+order: 1788754945099

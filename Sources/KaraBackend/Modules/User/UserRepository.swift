@@ -16,12 +16,13 @@ struct UserRepository: UserRepositoryProtocol, Sendable {
         }
         
         let id = UUID()
+        let now = Date()
         
         let newUser = try await sql.raw("""
             INSERT INTO users
-            (id, name, phone, password)
-            VALUES (\(bind: id), \(bind: name), \(bind: phone), \(bind: password))
-            RETURNING id, name, phone, password
+            (id, name, phone, password, phone_verified_at, created_at, updated_at)
+            VALUES (\(bind: id), \(bind: name), \(bind: phone), \(bind: password), NULL, \(bind: now), \(bind: now))
+            RETURNING id, name, phone, password, phone_verified_at, created_at, updated_at
         """).first(decoding: UserRow.self)
         
         guard let newUser else {
@@ -38,7 +39,7 @@ struct UserRepository: UserRepositoryProtocol, Sendable {
         
         let allUsers = try await sql.raw("""
             SELECT
-                id, name, phone, password
+                id, name, phone, password, phone_verified_at, created_at, updated_at
             FROM users
             """).all(decoding: UserRow.self)
         
@@ -52,7 +53,7 @@ struct UserRepository: UserRepositoryProtocol, Sendable {
         
         let user = try await sql.raw("""
             SELECT
-                id, name, phone, password
+                id, name, phone, password, phone_verified_at, created_at, updated_at
             FROM users
             WHERE id = \(bind: id)
             """).first(decoding: UserRow.self)
@@ -67,22 +68,11 @@ struct UserRepository: UserRepositoryProtocol, Sendable {
         
         let user = try await sql.raw("""
             SELECT
-                id, name, phone, password
+                id, name, phone, password, phone_verified_at, created_at, updated_at
             FROM users
             WHERE phone = \(bind: phone)
             """).first(decoding: UserRow.self)
         
         return user?.user
-    }
-}
-
-private struct UserRow: Decodable {
-    let id: UUID
-    let name: String
-    let phone: String
-    let password: String?
-    
-    var user: User {
-        User(id: id, name: name, phone: phone, password: password)
     }
 }

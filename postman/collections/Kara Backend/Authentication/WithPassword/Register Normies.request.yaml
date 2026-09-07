@@ -1,5 +1,4 @@
 $kind: http-request
-name: Register Normies
 url: "{{baseUrl}}/auth/register"
 method: POST
 headers:
@@ -17,4 +16,4 @@ body:
       "shopPhone": "08578987666"
     }
 examples: .resources/Register Normies.resources/examples
-order: 1680
+order: 1600966946719053

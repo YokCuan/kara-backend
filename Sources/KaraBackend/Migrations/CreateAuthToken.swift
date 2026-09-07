@@ -1,0 +1,20 @@
+import Fluent
+
+struct CreateAuthToken: AsyncMigration {
+    func prepare(on database: any Database) async throws {
+        try await database.schema("auth_tokens")
+            .id()
+            .field("user_id", .uuid, .required, .references("users", "id", onDelete: .cascade))
+            .field("token_hash", .string, .required)
+            .field("expires_at", .datetime, .required)
+            .field("created_at", .datetime, .required)
+            .field("revoked_at", .datetime)
+            .field("device_name", .string)
+            .unique(on: "token_hash")
+            .create()
+    }
+
+    func revert(on database: any Database) async throws {
+        try await database.schema("auth_tokens").delete()
+    }
+}

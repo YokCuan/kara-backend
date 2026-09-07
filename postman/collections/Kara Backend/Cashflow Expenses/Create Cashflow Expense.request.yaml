@@ -13,12 +13,15 @@ body:
       "supplierName": "Supplier Co.",
       "supplierPhone": "08012345678",
       "purchasedAt":"2026-08-29T13:55:06Z",
-      "paidAmount": 100000,
+      "paidAmount": 2000000,
       "createdBy": "{{userId}}",
       "updatedBy": "{{userId}}",
       "items": [
         {
-          "name": "Gaji Pemilik"
+          "name": "Gun Powder 2 ton"
+        },
+        {
+          "name": "Weapon Crates x2"
         }
       ]
     }

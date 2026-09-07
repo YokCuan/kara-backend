@@ -76,7 +76,7 @@ func routes(_ app: Application) throws {
     try app.register(collection: cashflowSalesNoteController)
     
     //    MARK: - Cashflow
-    let cashflowService = CashflowService(expenseRepository: expenseRepository, salesNoteRepository: salesNoteRepository)
+    let cashflowService = CashflowService(expenseRepository: expenseRepository, salesNotePaymentRepository: salesNotePaymentRepository)
     
     let cashflowController = CashflowController(cashflowService: cashflowService)
     try app.register(collection: cashflowController)

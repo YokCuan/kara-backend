@@ -3,6 +3,7 @@ import Vapor
 enum CashflowType: String, Content {
     case expense
     case salesNote = "sales_note"
+    
 }
 
 struct CashflowResponseDTO: Content {
@@ -28,5 +29,27 @@ struct CashflowExpenseRow: Decodable {
         case purchasedAt = "purchased_at"
         case supplierName = "supplier_name"
         case categoryName = "category_name"
+    }
+}
+
+struct CashflowSalesPaymentRow: Decodable {
+    let salesNoteId: UUID
+    let identifier: String
+    let customerName: String
+    let amount: Int
+    let paidAt: Date
+    let paymentAttempt: Int
+    let paymentCount: Int
+    let salesNoteStatus: Status
+
+    enum CodingKeys: String, CodingKey {
+        case salesNoteId = "sales_note_id"
+        case identifier
+        case customerName = "customer_name"
+        case amount
+        case paidAt = "paid_at"
+        case paymentAttempt = "payment_attempt"
+        case paymentCount = "payment_count"
+        case salesNoteStatus = "sales_note_status"
     }
 }

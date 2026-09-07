@@ -1,0 +1,48 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/auth/register"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "name": "Ria Tan",
+        "phone": "08578987666",
+        "password": "secret123",
+        "shopName": "Pempek Palembang 99",
+        "shopDescription": "#1 Pempek se-Academy",
+        "shopAddress": "Thamrin",
+        "shopPhone": "08578987666"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json; charset=utf-8
+    content-length: "419"
+    connection: keep-alive
+    date: Mon, 07 Sep 2026 04:23:14 GMT
+  body:
+    type: json
+    content: |-
+      {
+        "user": {
+          "name": "Ria Tan",
+          "phone": "+628578987666",
+          "hasPassword": true,
+          "id": "152CA26B-6AC4-425B-84F0-7732064E85B2"
+        },
+        "accessToken": "szaO485-XWkAy6ga67EYZVJACsps_0Bc2cjkDxoQW9g",
+        "expiresAt": "2026-10-07T04:23:14Z",
+        "shop": {
+          "name": "Pempek Palembang 99",
+          "ownerId": "152CA26B-6AC4-425B-84F0-7732064E85B2",
+          "address": "Thamrin",
+          "description": "#1 Pempek se-Academy",
+          "phone": "08578987666",
+          "id": "BE24B313-860E-49F3-B7DD-0CFA08F0E388"
+        }
+      }
+order: 1788754996609

@@ -7,7 +7,7 @@ struct CreateSalesNotePayment: AsyncMigration {
             .field("sales_note_id", .uuid, .required, .references("sales_notes", "id"))
             .field("payment_attempt", .int, .required)
             .field("paid_amount", .int, .required)
-            .field("paid_at", .date, .required)
+            .field("paid_at", .datetime, .required)
             .create()
     }
     
